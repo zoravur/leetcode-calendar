@@ -1,7 +1,21 @@
 import { useState, useEffect } from 'react';
-import GitHubHeatmap from './components/GitHubHeatmap';
-import CumulativeChart from './components/CumulativeChart';
-import RecentWriteups from './components/RecentWriteups';
+import { BrowserRouter, Routes, Route, useSearchParams } from 'react-router-dom';
+import Home from './components/Home';
+import ProblemDetail from './components/ProblemDetail';
+import WriteupsList from './components/WriteupsList';
+
+function HomeWrapper({ data, theme }) {
+  const [searchParams] = useSearchParams();
+  const from = searchParams.get('from');
+  const to = searchParams.get('to');
+
+  const dateRange = {
+    from: from || null,
+    to: to || null
+  };
+
+  return <Home data={data} theme={theme} dateRange={dateRange} />;
+}
 
 function App() {
   const [theme, setTheme] = useState(() => {
@@ -31,28 +45,25 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <header>
-        <h1>Zoravur's LeetCode Calendar ({new Date().getFullYear()})</h1>
+    <BrowserRouter>
+      <div className="app">
         <button onClick={toggleTheme} className="theme-toggle" aria-label="Toggle theme">
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
-      </header>
 
-      <div className="charts-container">
-        <div className="chart-box">
-          <h2>GitHub-style Heatmap</h2>
-          <GitHubHeatmap data={data.heatmapData} />
-        </div>
-
-        <div className="chart-box">
-          <h2>Cumulative Progress</h2>
-          <CumulativeChart data={data.cumulativeData} theme={theme} />
-        </div>
+        <Routes>
+          <Route path="/leetcode-calendar/" element={<HomeWrapper data={data} theme={theme} />} />
+          <Route
+            path="/leetcode-calendar/writeups"
+            element={<WriteupsList problems={data.problems} />}
+          />
+          <Route
+            path="/leetcode-calendar/problems/:slug"
+            element={<ProblemDetail problems={data.problems} />}
+          />
+        </Routes>
       </div>
-
-      <RecentWriteups problems={data.problems} />
-    </div>
+    </BrowserRouter>
   );
 }
 

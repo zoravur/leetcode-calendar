@@ -28,40 +28,76 @@ function parseProblems() {
 
     if (fs.statSync(problemPath).isDirectory() && fs.existsSync(readmePath)) {
       const content = fs.readFileSync(readmePath, 'utf8');
-      const { data } = matter(content);
+      const { data, content: markdown } = matter(content);
+
+      // Normalize date to YYYY-MM-DD string
+      let dateStr;
+      if (data.date instanceof Date) {
+        dateStr = data.date.toISOString().split('T')[0];
+      } else if (typeof data.date === 'string') {
+        dateStr = data.date.split('T')[0]; // Remove time if present
+      } else {
+        dateStr = data.date;
+      }
 
       problems.push({
         slug: dir,
-        ...data
+        ...data,
+        date: dateStr,
+        markdown
       });
     }
   }
 
-  return problems.sort((a, b) => new Date(b.date) - new Date(a.date));
+  return problems.sort((a, b) => b.date.localeCompare(a.date));
 }
 
-// Generate heatmap data for react-calendar-heatmap
+// Helper to increment a YYYY-MM-DD date string by one day (UTC)
+function addDay(dateStr) {
+  const date = new Date(dateStr + 'T00:00:00Z'); // Parse as UTC midnight
+  date.setUTCDate(date.getUTCDate() + 1);
+  return date.toISOString().split('T')[0];
+}
+
+// Generate heatmap data for react-activity-calendar
 function generateHeatmapData(problems) {
-  const currentYear = new Date().getFullYear();
   const countByDate = {};
 
-  // Count problems by date
+  // Count problems by date (already normalized in parseProblems)
   for (const problem of problems) {
-    const date = problem.date;
-    countByDate[date] = (countByDate[date] || 0) + 1;
+    const dateStr = problem.date;
+    countByDate[dateStr] = (countByDate[dateStr] || 0) + 1;
   }
 
-  // Generate all days for the year
-  const startDate = new Date(currentYear, 0, 1);
-  const endDate = new Date(currentYear, 11, 31);
+  // Calculate max count for level scaling
+  const maxCount = Math.max(...Object.values(countByDate), 1);
+
+  // Get today's date as YYYY-MM-DD (UTC)
+  const today = new Date();
+  const todayStr = today.toISOString().split('T')[0];
+
+  // Hardcoded start date: December 31st, 2025
+  const startDateStr = '2025-12-31';
 
   const heatmapData = [];
-  for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-    const dateStr = d.toISOString().split('T')[0];
+  let currentDate = startDateStr;
+
+  while (currentDate <= todayStr) {
+    const count = countByDate[currentDate] || 0;
+
+    // Calculate level (0-4) based on count
+    let level = 0;
+    if (count > 0) {
+      level = Math.min(4, Math.ceil((count / maxCount) * 4));
+    }
+
     heatmapData.push({
-      date: dateStr,
-      count: countByDate[dateStr] || 0
+      date: currentDate,
+      count: count,
+      level: level
     });
+
+    currentDate = addDay(currentDate);
   }
 
   return heatmapData;

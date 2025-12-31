@@ -1,33 +1,77 @@
-function RecentWriteups({ problems }) {
+import { Link } from 'react-router-dom';
+
+function RecentWriteups({ problems, activeFilter, onTagClick, showViewAll }) {
+  const formatDate = (dateStr) => {
+    const [year, month, day] = dateStr.split('-');
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${monthNames[parseInt(month) - 1]} ${parseInt(day)}, ${year}`;
+  };
+
   if (!problems || problems.length === 0) {
     return (
       <div className="writeups">
         <h2>Recent Writeups</h2>
-        <p>No problems yet. Run <code>lc new &lt;problem-name&gt;</code> to create your first one!</p>
+        {activeFilter ? (
+          <p>No problems found with tag: <strong>{activeFilter}</strong></p>
+        ) : (
+          <p>No problems yet. Run <code>lc new &lt;problem-name&gt;</code> to create your first one!</p>
+        )}
       </div>
     );
   }
 
   return (
     <div className="writeups">
-      <h2>Recent Writeups</h2>
+      <div className="writeups-header">
+        <h2>Recent Writeups</h2>
+        {showViewAll && (
+          <Link to="/leetcode-calendar/writeups" className="view-all-link">
+            View all →
+          </Link>
+        )}
+      </div>
       {problems.map((problem, index) => (
         <div key={index} className="writeup-item">
-          <div className="writeup-date">{problem.date}</div>
-          <a
-            href={`https://github.com/zoravur/leetcode-calendar/tree/main/problems/${problem.slug}`}
+          <div className="writeup-date">{formatDate(problem.date)}</div>
+          <Link
+            to={`/leetcode-calendar/problems/${problem.slug}`}
             className="writeup-title"
-            target="_blank"
-            rel="noopener noreferrer"
           >
             {problem.problem || problem.slug}
-          </a>
+          </Link>
           <div className="writeup-tags">
-            {problem.language && <span className="tag">{problem.language}</span>}
-            {problem.source && <span className="tag">{problem.source}</span>}
-            {problem.difficulty && <span className="tag">{problem.difficulty}</span>}
+            {problem.language && (
+              <span
+                className={`tag tag-clickable ${activeFilter === problem.language ? 'tag-active' : ''}`}
+                onClick={() => onTagClick(problem.language)}
+              >
+                {problem.language}
+              </span>
+            )}
+            {problem.source && (
+              <span
+                className={`tag tag-clickable ${activeFilter === problem.source ? 'tag-active' : ''}`}
+                onClick={() => onTagClick(problem.source)}
+              >
+                {problem.source}
+              </span>
+            )}
+            {problem.difficulty && (
+              <span
+                className={`tag tag-clickable ${activeFilter === problem.difficulty ? 'tag-active' : ''}`}
+                onClick={() => onTagClick(problem.difficulty)}
+              >
+                {problem.difficulty}
+              </span>
+            )}
             {problem.topics && problem.topics.map((topic, i) => (
-              <span key={i} className="tag">{topic}</span>
+              <span
+                key={i}
+                className={`tag tag-clickable ${activeFilter === topic ? 'tag-active' : ''}`}
+                onClick={() => onTagClick(topic)}
+              >
+                {topic}
+              </span>
             ))}
           </div>
         </div>
