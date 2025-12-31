@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROBLEMS_DIR="$SCRIPT_DIR/problems"
+
+show_help() {
+  cat << EOF
+Usage: lc <command> [arguments]
+
+Commands:
+  new <problem-name>   Create a new problem with README template
+  build                Generate static site from problems
+  help                 Show this help message
+
+Examples:
+  lc new two-sum
+  lc build
+EOF
+}
+
+cmd_new() {
+  if [ -z "$1" ]; then
+    echo "Error: problem name required"
+    echo "Usage: lc new <problem-name>"
+    exit 1
+  fi
+
+  PROBLEM_NAME="$1"
+  PROBLEM_DIR="$PROBLEMS_DIR/$PROBLEM_NAME"
+  README_FILE="$PROBLEM_DIR/README.md"
+
+  if [ -d "$PROBLEM_DIR" ]; then
+    echo "Error: problem '$PROBLEM_NAME' already exists"
+    exit 1
+  fi
+
+  mkdir -p "$PROBLEM_DIR"
+
+  TODAY=$(date +%Y-%m-%d)
+
+  cat > "$README_FILE" << 'TEMPLATE'
+---
+date: DATE_PLACEHOLDER
+problem: PROBLEM_PLACEHOLDER
+source: leetcode
+difficulty: easy
+time_minutes: 0
+topics: []
+language: python
+---
+
+## Approach
+
+[Describe your approach here]
+
+## Complexity
+
+- Time: O(?)
+- Space: O(?)
+TEMPLATE
+
+  # Replace placeholders
+  sed -i.bak "s/DATE_PLACEHOLDER/$TODAY/" "$README_FILE" && rm "$README_FILE.bak"
+  sed -i.bak "s/PROBLEM_PLACEHOLDER/$PROBLEM_NAME/" "$README_FILE" && rm "$README_FILE.bak"
+
+  echo "Created problem: $PROBLEM_NAME"
+  echo "  Directory: $PROBLEM_DIR"
+  echo "  README: $README_FILE"
+
+  # Open in editor if EDITOR is set
+  if [ -n "$EDITOR" ]; then
+    $EDITOR "$README_FILE"
+  fi
+}
+
+cmd_build() {
+  echo "Building static site..."
+  node "$SCRIPT_DIR/src/build.js"
+  echo "Site built successfully at docs/index.html"
+}
+
+case "${1:-}" in
+  new)
+    shift
+    cmd_new "$@"
+    ;;
+  build)
+    cmd_build
+    ;;
+  help|--help|-h|"")
+    show_help
+    ;;
+  *)
+    echo "Error: unknown command '$1'"
+    echo ""
+    show_help
+    exit 1
+    ;;
+esac
