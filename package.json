@@ -2,9 +2,11 @@
   "name": "leetcode-calendar",
   "version": "1.0.0",
   "description": "Static site generator for tracking competitive programming progress",
-  "main": "src/build.js",
+  "type": "module",
   "scripts": {
-    "build": "node src/build.js"
+    "dev": "vite",
+    "build": "node src/build.js && vite build",
+    "preview": "vite preview"
   },
   "bin": {
     "lc": "./lc"
@@ -13,6 +15,15 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-calendar-heatmap": "^1.9.0",
+    "chart.js": "^4.4.0",
+    "react-chartjs-2": "^5.2.0",
     "gray-matter": "^4.0.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.5"
   }
 }

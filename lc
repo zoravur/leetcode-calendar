@@ -77,8 +77,9 @@ TEMPLATE
 
 cmd_build() {
   echo "Building static site..."
-  node "$SCRIPT_DIR/src/build.js"
-  echo "Site built successfully at docs/index.html"
+  cd "$SCRIPT_DIR"
+  npm run build
+  echo "Site built successfully at docs/"
 }
 
 case "${1:-}" in

@@ -1,6 +1,6 @@
 # LeetCode Calendar
 
-A static site generator for tracking competitive programming progress.
+A React-based static site generator for tracking competitive programming progress.
 
 ## Live Site
 
@@ -9,11 +9,17 @@ A static site generator for tracking competitive programming progress.
 ## Quick Start
 
 ```bash
+# Install dependencies
+npm install
+
 # Create a new problem
 ./lc new two-sum
 
 # Build the static site
 ./lc build
+
+# Or develop locally
+npm run dev
 ```
 
 ## Structure
@@ -25,9 +31,12 @@ leetcode-calendar/
       README.md       # frontmatter + writeup
       solution.py     # or any language
   /src
-    build.js          # generates static site from /problems
-  /docs               # GitHub Pages output
-    index.html
+    build.js          # generates data.json from /problems
+    components/       # React components
+    App.jsx
+    main.jsx
+    styles.css
+  /docs               # GitHub Pages output (built by Vite)
   lc                  # CLI script
 ```
 
@@ -55,11 +64,20 @@ language: python
 
 ## Features
 
-- GitHub-style contribution heatmap
-- Cumulative progress chart with 1/day trendline
-- Recent writeups with tags
-- Pure static site, no backend needed
+- **GitHub-style contribution heatmap** using [react-calendar-heatmap](https://github.com/kevinsqi/react-calendar-heatmap)
+- **Cumulative progress chart** with 1/day trendline (Chart.js)
+- **Light/Dark mode toggle** with localStorage persistence
+- **Recent writeups** with tags
+- Pure static site built with React + Vite
 - Data lives in git
+
+## Tech Stack
+
+- React 18
+- Vite 6
+- react-calendar-heatmap
+- Chart.js + react-chartjs-2
+- gray-matter (YAML parsing)
 
 ## GitHub Pages Setup
 
