@@ -1,6 +1,20 @@
 {
   "problems": [
     {
+      "slug": "anagram-groups",
+      "date": "2026-01-02",
+      "problem": "anagram-groups",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 10,
+      "topics": [
+        "hash-map",
+        "string"
+      ],
+      "language": "python",
+      "markdown": "\n## Approach\n\nThis problem is mostly about clean implementation once you know that the best way to determine\nanagrams is by counting characters. There's the added wrinkle that your counts object is not\nhashable, which means it's hard to group strings based on them having the same counts. But \nthat's easy if you either use a frozenset, which allows you to hash non hashable types, or you\ndo what I did, and convert the unhashable type to a canonical string directly.\n\nI could have also used python Counters, to make it even easier, but I haven't fully memorized \nthe API so I thought it'd be better if I stuck to less powerful approaches.\n\ncollections.defaultdict is very powerful though, and worth learning.\n\n## Complexity\n\n- Time: O(n)\n- Space: O(n)\n\n## Results\n\nN/A (NeetCode)\n\n## Next Steps\n\nThere's a little bit of inconsistency with the APIs used, as I threw in \ncollections.defaultdict to fix a bug with key generation. Sticking to something simpler \ndespite the annoyance, or going all out with all the upgraded APIs, would probably be better.\n\nClaude suggested I used tuple() instead of string generation, for a few reasons:\n- Hashing — Tuples of ints hash directly. Strings require hashing each character, and your string is longer (commas, multi-digit numbers) than a 26-int tuple's logical content.\n- String building — ','.join(...) creates intermediate strings and a generator. tuple(counts) on a list is a single C-level copy.\n- Memory — \"0,0,0,3,0,...\" takes more bytes than (0,0,0,3,0,...) since each digit is a character.\n\nWill try to remember tuples for future problems.\n\n## Notes\n\nN/A\n"
+    },
+    {
       "slug": "n-queens",
       "date": "2026-01-01",
       "problem": "n-queens",
@@ -27,8 +41,8 @@
     },
     {
       "date": "2026-01-02",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 4
     }
   ],
   "cumulativeData": {
@@ -38,7 +52,7 @@
     ],
     "actual": [
       1,
-      1
+      2
     ],
     "trend": [
       1,
