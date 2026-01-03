@@ -21,6 +21,10 @@ the API so I thought it'd be better if I stuck to less powerful approaches.
 
 collections.defaultdict is very powerful though, and worth learning.
 
+## Solution
+
+::include{file="solution.py"}
+
 ## Complexity
 
 - Time: O(n)

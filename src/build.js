@@ -4,6 +4,11 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import matter from 'gray-matter';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkDirective from 'remark-directive';
+import remarkStringify from 'remark-stringify';
+import { visit } from 'unist-util-visit';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,6 +16,39 @@ const __dirname = path.dirname(__filename);
 const PROBLEMS_DIR = path.join(__dirname, '../problems');
 const PUBLIC_DIR = path.join(__dirname, '../public');
 const OUTPUT_FILE = path.join(PUBLIC_DIR, 'data.json');
+
+// Remark plugin to handle file includes
+function remarkInclude(problemPath) {
+  return () => {
+    return (tree) => {
+      visit(tree, 'leafDirective', (node) => {
+        if (node.name !== 'include') return;
+
+        const filename = node.attributes?.file;
+        if (!filename) return;
+
+        const filePath = path.join(problemPath, filename);
+
+        if (!fs.existsSync(filePath)) {
+          console.warn(`Warning: Include file not found: ${filePath}`);
+          return;
+        }
+
+        const content = fs.readFileSync(filePath, 'utf8');
+        const ext = path.extname(filename).slice(1);
+        const lang = ext === 'py' ? 'python' : ext;
+
+        // Replace directive with code block
+        node.type = 'code';
+        node.lang = lang;
+        node.value = content;
+        delete node.name;
+        delete node.attributes;
+        delete node.children;
+      });
+    };
+  };
+}
 
 // Parse all problem README files
 function parseProblems() {
@@ -40,11 +78,20 @@ function parseProblems() {
         dateStr = data.date;
       }
 
+      // Process markdown to handle includes
+      const processedMarkdown = unified()
+        .use(remarkParse)
+        .use(remarkDirective)
+        .use(remarkInclude(problemPath))
+        .use(remarkStringify)
+        .processSync(markdown)
+        .toString();
+
       problems.push({
         slug: dir,
         ...data,
         date: dateStr,
-        markdown
+        markdown: processedMarkdown
       });
     }
   }
