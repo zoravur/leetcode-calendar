@@ -55,10 +55,26 @@ language: python
 
 [Describe your approach here]
 
+## Solution
+
+::include{file="solution.py"}
+
 ## Complexity
 
 - Time: O(?)
 - Space: O(?)
+
+## Results
+
+[Add performance metrics here, or N/A if not applicable]
+
+## Next Steps
+
+[Future improvements or learnings]
+
+## Notes
+
+[Any additional notes]
 TEMPLATE
 
   # Replace placeholders
