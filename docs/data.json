@@ -1,6 +1,20 @@
 {
   "problems": [
     {
+      "slug": "string-encode-and-decode",
+      "date": "2026-01-04",
+      "problem": "string-encode-and-decode",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 10,
+      "topics": [
+        "string",
+        "design"
+      ],
+      "language": "python",
+      "markdown": "## Problem\n\nDesign an algorithm to encode a list of strings to a string. The encoded string is then sent over the network and is decoded back to the original list of strings.\n\n## Approach\n\nFirst approach was to cheat a bit, just to see if it would work. `repr()` converts a python value to a\nstring that evaluates to the original value. Then, ast.literal\\_eval on the other side is the\n\"inverse\" of repr that definitely works for relatively simple things like lists of strings.\n\nHow does repr and ast.literal\\_eval encode values as python objects? Fundamentally, the core problem with\nany parsing task such as this is separating the data from the metadata. How do you know if something is\na value or not? That's done through program state. Roughly, here's the matrix:\n\n+---------------------+----------------------------------------------------------------------+------------------------------------------------------------+\n| Expecting \\ Actual  | Data                                                                 |  Metadata                                                  |\n+---------------------+----------------------------------------------------------------------+------------------------------------------------------------+\n| Data                | Normal parse                                                         |  dropped headers / fields; bad state, security risk likely |\n| Metadata            | Direct injection risk, very bad. User controls program control flow  |  Normal parse                                              |\n+---------------------+----------------------------------------------------------------------+------------------------------------------------------------+\n\nBecause we control both the encoder and the decoder, we can easily sync the initial state. We can either start with data/data,\nor metadata/metadata. How do we pick which is better?\n\nSuppose we chose our algorithm to start on data/data. Great. We start transmitting the string, one\ncharacter at a time. How do we know when the next string begins? We could emit a special character\nsequence, called a delimiter. but the problem is that the string itself could contain any possible\nascii sequence! That makes it impsosible to tell whether the delimiter represents the end of the\nstring, or is part of the string itself.\n\nHere, one possible approach is try to make this work by mapping some characters onto two character\nsequences -- we call this \"escaping\". For instance, we could say that strings are null terminated,\nalways ending in `chr(0)`, or `'\\0'`. But then, what happens if `chr(0)` is in the string itself? Then,\nwe would escape, letting `\"\\\\0\"` represent the null terminator if it's in a string. But then what\nabout `'\\'` itself? Well, we would map that one to `'\\\\'`. Now, `'\\'` is a special character that determines\nhow the next character is processed, and `chr(0)` actually never appears directly in the strings\nthemselves.\n\nThis is complicated! Luckily, there is a simpler approach, which is what I used. If we switch to\nmetadata/metadata to start, we can include everything needed to process the first string right at\nthe beginning. If we prefix each string with its length, we can process the following data\nup to that length, before switching back to processing metadata. here's what I mean:\n\n```\n[\"Hello\", \"world\"] -> [5Hello5world]\n```\n\nDecoding, we read off the number at the start, process that many characters and append it to our list,\nwhich reverses the above.\n\nThere's some problems with this approach. How do we know when the number ends? What if\nthe string starts with a number, For instance, take the following cases:\n\n```\n[\"verylongstring\", \"wow\"] -> 14verylongstring3wow\n[\"1337\", \"speak\"] -> 413375speak\n```\n\nIn the first example, we read off multiple digits to handle a string over 9 characters. All's well and good,\nwe can just stop parsing after the first non-digit. But as soon as we try to implement that, the second\ncase bites us: we try to read a string of length 413375, not knowing that the first string actually\nconsists of the numbers \"1337\".\n\nHere, we need only introduce a separator between the number and the string it represents. ',' works fine\n\\-- it unambiguously signals the end of the number.\n\nThis works and is the most flexible approach, but it's a bit annoying that the number spans multiple characters.\nSo, I noticed that the max string length was 200 <= 255 = 2^8-1, the max size of a char, meaning we could use a\nsingle character to store the length.\n\nSo that's how my solution deviates. I use a single char/byte anyway, relying on the fact that strings are at most\n200 characters long. But even if we allowed infinite length strings, the previous approach still works.\n\nI also add a 255 as a control character to determine the end of the sequence. This is not required for the\nproblem, as we have the full string and can check if the string is empty. But in real network scenarios,\nwe might run into a situation where we are streaming data and it's not obvious that the data is finished.\nWhich is why I included that.\n\n## Solution\n\n```python\nclass Solution:\n\n    def encode(self, strs: List[str]) -> str:\n        return ''.join(s for t in zip((chr(len(s)) for s in strs), strs) for s in t) + chr(255)\n\n    def decode(self, s: str) -> List[str]:\n        res = []\n        while ord(s[0]) != 255:\n            l = ord(s[0])\n            res.append(s[1:l+1])\n            s = s[l+1:]\n        return res\n\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n)\n\n## Results\n\nN/A (neetcode)\n\n## Next Steps\n\nNeed to improve explanation. Should get better at talking and start recording self.\n\n## Notes\n\nNo notes this time. Straight to implementation.\n"
+    },
+    {
       "slug": "top-k-frequent-elements",
       "date": "2026-01-03",
       "problem": "top-k-frequent-elements",
@@ -65,8 +79,8 @@
     },
     {
       "date": "2026-01-04",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 4
     },
     {
       "date": "2026-01-05",
@@ -85,7 +99,7 @@
       1,
       2,
       3,
-      3
+      4
     ],
     "trend": [
       1,
