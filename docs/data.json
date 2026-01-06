@@ -1,6 +1,19 @@
 {
   "problems": [
     {
+      "slug": "first-missing-positive",
+      "date": "2026-01-06",
+      "problem": "first-missing-positive",
+      "source": "neetcode",
+      "difficulty": "hard",
+      "time_minutes": 30,
+      "topics": [
+        "array"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nThis'll be a terser explanation, due to time constraints.\n\nI started by doing the algorithm where you move each element to its corresponding sorted index,\nexcept that we would shift the range 1..n to 0..n-1. Then, since the first missing positive integer\nwould be the first mismatch, we'd immediately find the solution upon iterating through the array.\n\nI started by moving each positive integer I encountered in the range 1..n to its corresponding index.\nIn order to preserve the set, I would move the integer in target index to the current position.\nI spent 2 incorrect answers debugging, before I realized that I wasn't replacing the new integer\nat the current position in case it was also in the range. This resulted in me missing certain\nswaps that needed to happen.\n\nBut this was sufficient to get the correct answer.\n\n## Solution\n\n```python\nclass Solution:\n    def firstMissingPositive(self, nums: List[int]) -> int:\n        for i in range(len(nums)):\n            num = nums[i]\n            j = num-1\n\n            while num >= 1 and num <= len(nums) and nums[j] != num:\n                nums[i] = nums[j]\n                nums[j] = num\n                num = nums[i]\n                j = num-1\n\n        for i in range(len(nums)):\n            if nums[i] != i+1:\n                return i+1\n        return len(nums)+1\n\n```\n\n## Complexity\n\n* Time: O(n)\n  * justification: we rotate each subsequence at most once, which means that each element is\n    compared at most twice, which means a constant number of operations per element, or O(n)\n* Space: O(1) (auxiliary)\n  * justification: we never create an array, or create new elements in a loop. All modifications\n    happen in place, meaning that we use no extra space.\n\n## Results\n\nN/A (neetcode)\n\n## Next Steps\n\nFlesh out this explanation in more detail.\nSwitch to using binary search for the final step.\n\n## Notes\n\n\\[Any additional notes]\n"
+    },
+    {
       "slug": "string-encode-and-decode",
       "date": "2026-01-04",
       "problem": "string-encode-and-decode",
@@ -86,6 +99,11 @@
       "date": "2026-01-05",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-01-06",
+      "count": 1,
+      "level": 4
     }
   ],
   "cumulativeData": {
@@ -93,19 +111,25 @@
       "2026-01-01",
       "2026-01-02",
       "2026-01-03",
-      "2026-01-04"
+      "2026-01-04",
+      "2026-01-05",
+      "2026-01-06"
     ],
     "actual": [
       1,
       2,
       3,
-      4
+      4,
+      4,
+      5
     ],
     "trend": [
       1,
       2,
       3,
-      4
+      4,
+      5,
+      6
     ]
   }
 }
