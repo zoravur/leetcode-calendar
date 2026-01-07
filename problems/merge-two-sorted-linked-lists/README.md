@@ -3,7 +3,7 @@ date: 2026-01-07
 problem: merge-two-sorted-linked-lists
 source: neetcode
 difficulty: easy
-time_minutes: 0
+time_minutes: 15
 topics: [linked-list, sorting]
 language: python
 ---
