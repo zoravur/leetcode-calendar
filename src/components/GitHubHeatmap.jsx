@@ -5,19 +5,26 @@ function GitHubHeatmap({ data, theme, dateRange }) {
   const isDark = theme === 'dark';
   const containerRef = useRef(null);
 
-  // Filter data based on dateRange query params
+  // Filter data based on dateRange query params and current date
   const filteredData = useMemo(() => {
-    if (!dateRange?.from && !dateRange?.to) {
-      return data;
-    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayStr = today.toISOString().split('T')[0];
 
-    const fromDate = dateRange.from ? new Date(dateRange.from) : null;
-    const toDate = dateRange.to ? new Date(dateRange.to) : null;
+    const fromDate = dateRange?.from ? new Date(dateRange.from) : null;
+    const toDate = dateRange?.to ? new Date(dateRange.to) : null;
 
     return data.filter(item => {
-      const itemDate = new Date(item.date);
-      if (fromDate && itemDate < fromDate) return false;
-      if (toDate && itemDate > toDate) return false;
+      // Always filter out future dates
+      if (item.date > todayStr) return false;
+
+      // Apply custom date range if provided
+      if (fromDate || toDate) {
+        const itemDate = new Date(item.date);
+        if (fromDate && itemDate < fromDate) return false;
+        if (toDate && itemDate > toDate) return false;
+      }
+
       return true;
     });
   }, [data, dateRange]);

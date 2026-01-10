@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -25,12 +26,28 @@ ChartJS.register(
 function CumulativeChart({ data, theme }) {
   const isDark = theme === 'dark';
 
+  // Filter data to only include dates up to today
+  const filteredData = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayStr = today.toISOString().split('T')[0];
+
+    const lastIndex = data.dates.findIndex(date => date > todayStr);
+    const endIndex = lastIndex === -1 ? data.dates.length : lastIndex;
+
+    return {
+      dates: data.dates.slice(0, endIndex),
+      actual: data.actual.slice(0, endIndex),
+      trend: data.trend.slice(0, endIndex)
+    };
+  }, [data]);
+
   const chartData = {
-    labels: data.dates,
+    labels: filteredData.dates,
     datasets: [
       {
         label: 'Actual Progress',
-        data: data.actual,
+        data: filteredData.actual,
         borderColor: isDark ? '#58a6ff' : '#0969da',
         backgroundColor: isDark ? 'rgba(88, 166, 255, 0.1)' : 'rgba(9, 105, 218, 0.1)',
         fill: true,
@@ -38,7 +55,7 @@ function CumulativeChart({ data, theme }) {
       },
       {
         label: 'Target (1/day)',
-        data: data.trend,
+        data: filteredData.trend,
         borderColor: isDark ? '#8b949e' : '#656d76',
         backgroundColor: 'transparent',
         borderDash: [5, 5],

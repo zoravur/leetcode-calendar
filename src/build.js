@@ -119,9 +119,11 @@ function generateHeatmapData(problems) {
   // Calculate max count for level scaling
   const maxCount = Math.max(...Object.values(countByDate), 1);
 
-  // Get today's date as YYYY-MM-DD (UTC)
+  // Get today's date as YYYY-MM-DD (UTC) and add 30 days buffer for future builds
   const today = new Date();
-  const todayStr = today.toISOString().split('T')[0];
+  const futureDate = new Date(today);
+  futureDate.setDate(futureDate.getDate() + 30);
+  const futureDateStr = futureDate.toISOString().split('T')[0];
 
   // Hardcoded start date: December 31st, 2025
   const startDateStr = '2025-12-31';
@@ -129,7 +131,7 @@ function generateHeatmapData(problems) {
   const heatmapData = [];
   let currentDate = startDateStr;
 
-  while (currentDate <= todayStr) {
+  while (currentDate <= futureDateStr) {
     const count = countByDate[currentDate] || 0;
 
     // Calculate level (0-4) based on count
@@ -162,6 +164,10 @@ function generateCumulativeData(problems) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
+  // Add 30 days buffer for future builds
+  const futureDate = new Date(today);
+  futureDate.setDate(futureDate.getDate() + 30);
+
   const dates = [];
   const actual = [];
   const trend = [];
@@ -169,7 +175,7 @@ function generateCumulativeData(problems) {
   let currentCount = 0;
   let problemIndex = 0;
 
-  for (let d = new Date(firstDate); d <= today; d.setDate(d.getDate() + 1)) {
+  for (let d = new Date(firstDate); d <= futureDate; d.setDate(d.getDate() + 1)) {
     const dateStr = d.toISOString().split('T')[0];
     dates.push(dateStr);
 
