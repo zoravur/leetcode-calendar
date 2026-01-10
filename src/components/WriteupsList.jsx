@@ -1,16 +1,27 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
-function WriteupsList({ problems }) {
+function WriteupsList({ data }) {
   const [activeFilter, setActiveFilter] = useState(null);
+  const [theme, setTheme] = useState('dark');
+
+  // Initialize theme from localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+    document.body.setAttribute('data-theme', savedTheme);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.body.setAttribute('data-theme', newTheme);
+  };
 
   const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    });
+    const [year, month, day] = dateStr.split('-');
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${monthNames[parseInt(month) - 1]} ${parseInt(day)}, ${year}`;
   };
 
   const handleTagClick = (tag) => {
@@ -23,22 +34,26 @@ function WriteupsList({ problems }) {
 
   // Filter problems based on active filter
   const filteredProblems = activeFilter
-    ? problems.filter(problem => {
+    ? data.problems.filter(problem => {
         if (problem.language === activeFilter) return true;
         if (problem.source === activeFilter) return true;
         if (problem.difficulty === activeFilter) return true;
         if (problem.topics && problem.topics.includes(activeFilter)) return true;
         return false;
       })
-    : problems;
+    : data.problems;
 
   return (
-    <div className="writeups-list-page">
-      <div className="page-header">
-        <Link to="/leetcode-calendar/" className="back-link">← Back to Calendar</Link>
-      </div>
+    <>
+      <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+        {theme === 'dark' ? '☀️' : '🌙'}
+      </button>
+      <div className="writeups-list-page">
+        <div className="page-header">
+          <a href="/leetcode-calendar/" className="back-link">← Back to Calendar</a>
+        </div>
 
-      <h1>All Writeups ({problems.length})</h1>
+      <h1>All Writeups ({data.problems.length})</h1>
 
       {/* Active filter indicator */}
       {activeFilter && (
@@ -57,12 +72,12 @@ function WriteupsList({ problems }) {
           {filteredProblems.map((problem, index) => (
             <div key={index} className="writeup-item">
               <div className="writeup-date">{formatDate(problem.date)}</div>
-              <Link
-                to={`/leetcode-calendar/problems/${problem.slug}`}
+              <a
+                href={`/leetcode-calendar/problems/${problem.slug}`}
                 className="writeup-title"
               >
                 {problem.problem || problem.slug}
-              </Link>
+              </a>
               <div className="writeup-tags">
                 {problem.language && (
                   <span
@@ -103,6 +118,7 @@ function WriteupsList({ problems }) {
         </div>
       )}
     </div>
+    </>
   );
 }
 

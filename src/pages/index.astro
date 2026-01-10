@@ -1,0 +1,14 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Home from '../components/Home.jsx';
+import data from '../../public/data.json';
+
+const urlParams = Astro.url.searchParams;
+const from = urlParams.get('from');
+const to = urlParams.get('to');
+const dateRange = { from: from || null, to: to || null };
+---
+
+<Layout title="Zoravur's LeetCode Calendar">
+  <Home client:only="react" data={data} dateRange={dateRange} />
+</Layout>

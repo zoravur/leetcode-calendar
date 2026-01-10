@@ -4,9 +4,9 @@
   "description": "Static site generator for tracking competitive programming progress",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "node src/build.js && vite build",
-    "preview": "vite preview"
+    "dev": "astro dev",
+    "build": "node src/build.js && astro build",
+    "preview": "astro preview"
   },
   "bin": {
     "lc": "./lc"
@@ -19,6 +19,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@astrojs/mdx": "^4.3.13",
+    "@astrojs/react": "^4.4.2",
+    "astro": "^5.16.8",
     "chart.js": "^4.4.0",
     "gray-matter": "^4.0.3",
     "react": "^18.3.1",

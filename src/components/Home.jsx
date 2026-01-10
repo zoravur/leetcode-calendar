@@ -1,11 +1,26 @@
-import { useState } from 'react';
-import GitHubHeatmap from './GitHubHeatmap';
-import CumulativeChart from './CumulativeChart';
-import RecentWriteups from './RecentWriteups';
+import { useState, useEffect } from 'react';
+import GitHubHeatmap from './GitHubHeatmap.jsx';
+import CumulativeChart from './CumulativeChart.jsx';
+import RecentWriteups from './RecentWriteups.jsx';
 
-function Home({ data, theme, dateRange }) {
+function Home({ data, dateRange }) {
   const [activeChart, setActiveChart] = useState('heatmap');
   const [activeFilter, setActiveFilter] = useState(null);
+  const [theme, setTheme] = useState('dark');
+
+  // Initialize theme from localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+    document.body.setAttribute('data-theme', savedTheme);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.body.setAttribute('data-theme', newTheme);
+  };
 
   // Calculate summary stats
   const totalProblems = data.problems.length;
@@ -40,6 +55,10 @@ function Home({ data, theme, dateRange }) {
 
   return (
     <>
+      <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+        {theme === 'dark' ? '☀️' : '🌙'}
+      </button>
+
       <header>
         <h1>Zoravur's LeetCode Calendar</h1>
       </header>

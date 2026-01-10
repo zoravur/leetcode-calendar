@@ -1,10 +1,25 @@
-import { useParams, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github-dark.css';
 
-function ProblemDetail({ problems }) {
-  const { slug } = useParams();
+function ProblemDetail({ problems, slug }) {
+  const [theme, setTheme] = useState('dark');
+
+  // Initialize theme from localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+    document.body.setAttribute('data-theme', savedTheme);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.body.setAttribute('data-theme', newTheme);
+  };
+
   const problem = problems.find(p => p.slug === slug);
 
   const formatDate = (dateStr) => {
@@ -15,23 +30,32 @@ function ProblemDetail({ problems }) {
 
   if (!problem) {
     return (
-      <div className="problem-detail">
-        <div className="problem-header">
-          <Link to="/leetcode-calendar/" className="back-link">← Back to Calendar</Link>
+      <>
+        <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
+        <div className="problem-detail">
+          <div className="problem-header">
+            <a href="/leetcode-calendar/" className="back-link">← Back to Calendar</a>
+          </div>
+          <div className="problem-not-found">
+            <h1>Problem not found</h1>
+            <p>The problem "{slug}" doesn't exist.</p>
+          </div>
         </div>
-        <div className="problem-not-found">
-          <h1>Problem not found</h1>
-          <p>The problem "{slug}" doesn't exist.</p>
-        </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="problem-detail">
-      <div className="problem-header">
-        <Link to="/leetcode-calendar/" className="back-link">← Back to Calendar</Link>
-      </div>
+    <>
+      <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+        {theme === 'dark' ? '☀️' : '🌙'}
+      </button>
+      <div className="problem-detail">
+        <div className="problem-header">
+          <a href="/leetcode-calendar/" className="back-link">← Back to Calendar</a>
+        </div>
 
       <div className="problem-meta">
         <h1>{problem.problem || problem.slug}</h1>
@@ -63,6 +87,7 @@ function ProblemDetail({ problems }) {
         </ReactMarkdown>
       </div>
     </div>
+    </>
   );
 }
 

@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-
 function RecentWriteups({ problems, activeFilter, onTagClick, showViewAll }) {
   const formatDate = (dateStr) => {
     const [year, month, day] = dateStr.split('-');
@@ -25,20 +23,20 @@ function RecentWriteups({ problems, activeFilter, onTagClick, showViewAll }) {
       <div className="writeups-header">
         <h2>Recent Writeups</h2>
         {showViewAll && (
-          <Link to="/leetcode-calendar/writeups" className="view-all-link">
+          <a href="/leetcode-calendar/writeups" className="view-all-link">
             View all →
-          </Link>
+          </a>
         )}
       </div>
       {problems.map((problem, index) => (
         <div key={index} className="writeup-item">
           <div className="writeup-date">{formatDate(problem.date)}</div>
-          <Link
-            to={`/leetcode-calendar/problems/${problem.slug}`}
+          <a
+            href={`/leetcode-calendar/problems/${problem.slug}`}
             className="writeup-title"
           >
             {problem.problem || problem.slug}
-          </Link>
+          </a>
           <div className="writeup-tags">
             {problem.language && (
               <span

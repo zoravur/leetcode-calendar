@@ -1,0 +1,9 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import WriteupsList from '../../components/WriteupsList.jsx';
+import data from '../../../public/data.json';
+---
+
+<Layout title="All Writeups | Zoravur's LeetCode Calendar">
+  <WriteupsList client:load data={data} />
+</Layout>
