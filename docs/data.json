@@ -1,6 +1,33 @@
 {
   "problems": [
     {
+      "slug": "k-closest-points-to-origin",
+      "date": "2026-01-10",
+      "problem": "k-closest-points-to-origin",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 20,
+      "topics": [
+        "heap"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nYou can keep a running tally of the top `k` elements according to some measure in O(nlog k)\ntime, as long as you have a data structure that can insert an element / eject the smallest element\nin O(log m) time, where m is the size of the data structure. Setting m = k, the idea is to iterate\nthrough the list of elements and repeatedly insert an element, ejecting when we exceed m, our count.\nThis results in a complexity of O(n) \\* (O(log k) + O(log k)) = O(n log k), which is the best\nthat we can do.\n\nA max-heap is the data structure that satisfies this O(log k) requirement. Because older versions\nof Python use a min-heap (which ejects the smallest element), you can negate the keys to order in\nthe opposite way). This is sufficient.\n\n## Solution\n\n```python\nclass Solution:\n    def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:\n\n        def distance(p):\n            return p[0]*p[0]+p[1]*p[1]\n\n        h = []\n\n        for p in points:\n            d = distance(p)\n            if len(h) < k:\n                heapq.heappush(h, (-d, p))\n            else:\n                heapq.heappushpop(h, (-d, p))\n            # print((d,p))\n\n        return [p for (d, p) in h]\n\n```\n\n## Complexity\n\n* Time: O(n log k)\n* Space: O(n) (O(k) additional)\n\n## Results\n\n0.71 seconds\n\n## Next Steps\n\nI got max and min heap confused, and had to look up documentation which slowed me down. Just need\nmore practice.\n\n## Notes\n\nN/A\n"
+    },
+    {
+      "slug": "two-sum",
+      "date": "2026-01-10",
+      "problem": "two-sum",
+      "source": "leetcode",
+      "difficulty": "easy",
+      "time_minutes": 5,
+      "topics": [
+        "array",
+        "hash-map"
+      ],
+      "language": "python",
+      "markdown": "## Problem\n\nGiven an array of integers `nums` and an integer `target`, return the indices `i` and `j` such that `nums[i] + nums[j] == target` and `i != j`.\n\nYou may assume that every input has exactly one pair of indices `i` and `j` that satisfy the condition.\n\nReturn the answer with the smaller index first.\n\n## Approach\n\nNotice that we if we have to construct a sum of k numbers to equal target t, we can fix\nk-1 elements and search for $$t-(n\\_0+...+n\\_{k-1})$$. This can be further improved upon\nby storing the seen numbers in a structure that allows us to easily verify membership,\nalong with a map from the number to any of its indexes in the array, because that's what\nwe want to return. A hash map is best for this, or as it's known in python, a dict. So\nwe iterate through the array, adding each number we've seen to the dict while simultaneously\nchecking if the number `target - number` is already in the dict. And if it is, we return\nthe indices corresponding to these two numbers. It's also made easier by the fact\nthat a solution is guaranteed to both exist and be unique, but even if it weren't we could\nreturn \\[-1, -1] indicating no solution.\n\n## Solution\n\n```python\nclass Solution:\n    def twoSum(self, nums: List[int], target: int) -> List[int]:\n        seenAt = {}\n        for i, num in enumerate(nums):\n            if target - num in seenAt:\n                return [seenAt[target-num], i]\n            seenAt[num] = i\n        return [-1, -1]\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n)\n\n## Results\n\nN/A\n\n## Next Steps\n\nN/A\n\n## Notes\n\nclassic. hashmap, store each seen num, check if target - cur is in nums\n"
+    },
+    {
       "slug": "valid-parenthesis-string",
       "date": "2026-01-08",
       "problem": "valid-parenthesis-string",
@@ -107,22 +134,22 @@
     {
       "date": "2026-01-01",
       "count": 1,
-      "level": 4
+      "level": 2
     },
     {
       "date": "2026-01-02",
       "count": 1,
-      "level": 4
+      "level": 2
     },
     {
       "date": "2026-01-03",
       "count": 1,
-      "level": 4
+      "level": 2
     },
     {
       "date": "2026-01-04",
       "count": 1,
-      "level": 4
+      "level": 2
     },
     {
       "date": "2026-01-05",
@@ -132,17 +159,17 @@
     {
       "date": "2026-01-06",
       "count": 1,
-      "level": 4
+      "level": 2
     },
     {
       "date": "2026-01-07",
       "count": 1,
-      "level": 4
+      "level": 2
     },
     {
       "date": "2026-01-08",
       "count": 1,
-      "level": 4
+      "level": 2
     },
     {
       "date": "2026-01-09",
@@ -151,8 +178,8 @@
     },
     {
       "date": "2026-01-10",
-      "count": 0,
-      "level": 0
+      "count": 2,
+      "level": 4
     },
     {
       "date": "2026-01-11",
@@ -363,37 +390,37 @@
       6,
       7,
       7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9
     ],
     "trend": [
       1,
