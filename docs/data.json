@@ -1,6 +1,20 @@
 {
   "problems": [
     {
+      "slug": "binary-tree-right-side-view",
+      "date": "2026-01-11",
+      "problem": "binary-tree-right-side-view",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 5,
+      "topics": [
+        "binary-tree",
+        "recursion"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nIf we do a preorder traversal, but start with the right subtree, then the rightmost node at every\nlevel will be the node that we first encounter. Also, because we always encounter a parent before its child, it's enough to monotonically extend the list if we encounter a new node at a depth greater\nthan the max depth of the current list (which is equal to its length - 1).\n\nThen it's just a matter of doing a preorder traversal with the right subtree first.\n\n## Solution\n\n```python\n# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\n\nclass Solution:\n    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:\n        \n        rightView = []\n\n        def rightSideViewRec(cur: Optional[TreeNode], depth=0):\n            nonlocal rightView\n\n            if not cur:\n                return\n\n            if depth >= len(rightView):\n                rightView.append(cur.val)\n\n            rightSideViewRec(cur.right, depth=depth+1)\n            rightSideViewRec(cur.left, depth=depth+1)\n        \n        rightSideViewRec(root)\n\n        return rightView\n            \n\n\n\n\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n) (O(n) additional worst case, O(log n) on average)\n\n## Results\n\nN/A\n\n## Next Steps\n\nNone. This one was pretty easy. For the explanation, I clicked into the solution because I was\na little confused about the test case generation. I need to stop doing that.\n\n## Notes\n"
+    },
+    {
       "slug": "k-closest-points-to-origin",
       "date": "2026-01-10",
       "problem": "k-closest-points-to-origin",
@@ -183,8 +197,8 @@
     },
     {
       "date": "2026-01-11",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 2
     },
     {
       "date": "2026-01-12",
@@ -335,6 +349,11 @@
       "date": "2026-02-10",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-02-11",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -378,7 +397,8 @@
       "2026-02-06",
       "2026-02-07",
       "2026-02-08",
-      "2026-02-09"
+      "2026-02-09",
+      "2026-02-10"
     ],
     "actual": [
       1,
@@ -391,36 +411,37 @@
       7,
       7,
       9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
     ],
     "trend": [
       1,
@@ -462,7 +483,8 @@
       37,
       38,
       39,
-      40
+      40,
+      41
     ]
   }
 }
