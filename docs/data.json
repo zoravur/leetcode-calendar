@@ -1,6 +1,19 @@
 {
   "problems": [
     {
+      "slug": "count-good-nodes-in-binary-tree",
+      "date": "2026-01-14",
+      "problem": "count-good-nodes-in-binary-tree",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 5,
+      "topics": [
+        "binary-tree"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nBinary trees problems are easy because they lend themselves to straightforward recursion.\n\nHere, as we go down a tree, we have to determine whether we have seen any nodes larger than the\ncurrent node. This is not hard, if we store a max per path.\n\nCombine that with the fact that the total number of good nodes is the sum of the nodes in the two\nsubtrees, and all we have to do is recursively call the main function across the two subtrees.\n\n## Solution\n\n```python\n# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\n\nclass Solution:\n    def goodNodes(self, root: TreeNode, max_seen:int=float('-inf')) -> int:\n        if not root:\n            return 0\n\n        total = 0\n        if root.val >= max_seen:\n            max_seen = root.val\n            total += 1\n\n        total += self.goodNodes(root.left, max_seen)\n        total += self.goodNodes(root.right, max_seen)\n        \n        return total\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n)\n\n## Results\n\nN/A\n\n## Next Steps\n\nGot this one first try. Maybe explain it better.\n\n## Notes\n\nNo notes.\n"
+    },
+    {
       "slug": "house-robber",
       "date": "2026-01-14",
       "problem": "house-robber",
@@ -11,7 +24,7 @@
         "dynamic-programming"
       ],
       "language": "python",
-      "markdown": "## Approach\n\nI've seen this one before -- it's a classic DP problem.\n\nEvery DP problem consists of two things:\n\n1. overlapping subproblems - a problem which can be decomposed into subproblems, where each\n   subproblem is used more than once in evaluating the solution to the whole. A trivial example\n   is computing x^n: it can be decomposed in terms of x^(n%2) \\* x^(n/2) \\* x^(n/2), where x^(n/2)\n   can be computed once instead of twice / reused. This is the foundation of the exponentiation\n   by squaring algorithm which computes exponents in O(log n) time.\n2. optimal substructure - a problem where an optimal solution can be constructed efficiently from\n   an optimal solution to the subproblems. In this example, the optimal solution to determining\n   which houses to rob on the street can be decomposed as the problem of determining whether\n   to rob the current house or the house before it, provided all the houses to the left are\n   robbed optimally. To be more precise, assuming we know how best to rob the subarray \\[0, ..., i-1],\n   and \\[0, ..., i], whether to rob the (i+1)st house depends on whether the sum from \\[0, ..., i] is\n   larger than the sub from \\[0, ..., i-1] + nums\\[i]. Notice that we access the solution to the\n   subproblem \\[0, ..., i] twice, once when calculating whether to rob i+1 and once when calculating\n   i+2. If we didn't cache this with our dp array, we'd run into an exponential blowup, as each\n   problem depends on two smaller subproblems. But because they overlap, we can compute the solution\n   once instead of `2^recursion_depth`. And because of optimality, we are always going to rely\n   on the best known solution, instead of having to select a solution that isn't as good now\n   in order to get a better one later.\n\n## Solution\n\n::include{file=\"solution.py\"}\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n)\n\n## Results\n\nN/A\n\n## Next Steps\n\n* Could do well to create fewer bugs / false submissions\n\n## Notes\n\nN/A\n"
+      "markdown": "## Approach\n\nI've seen this one before -- it's a classic DP problem.\n\nEvery DP problem consists of two things:\n\n1. overlapping subproblems - a problem which can be decomposed into subproblems, where each\n   subproblem is used more than once in evaluating the solution to the whole. A trivial example\n   is computing x^n: it can be decomposed in terms of x^(n%2) \\* x^(n/2) \\* x^(n/2), where x^(n/2)\n   can be computed once instead of twice / reused. This is the foundation of the exponentiation\n   by squaring algorithm which computes exponents in O(log n) time.\n2. optimal substructure - a problem where an optimal solution can be constructed efficiently from\n   an optimal solution to the subproblems. In this example, the optimal solution to determining\n   which houses to rob on the street can be decomposed as the problem of determining whether\n   to rob the current house or the house before it, provided all the houses to the left are\n   robbed optimally. To be more precise, assuming we know how best to rob the subarray \\[0, ..., i-1],\n   and \\[0, ..., i], whether to rob the (i+1)st house depends on whether the sum from \\[0, ..., i] is\n   larger than the sub from \\[0, ..., i-1] + nums\\[i]. Notice that we access the solution to the\n   subproblem \\[0, ..., i] twice, once when calculating whether to rob i+1 and once when calculating\n   i+2. If we didn't cache this with our dp array, we'd run into an exponential blowup, as each\n   problem depends on two smaller subproblems. But because they overlap, we can compute the solution\n   once instead of `2^recursion_depth`. And because of optimality, we are always going to rely\n   on the best known solution, instead of having to select a solution that isn't as good now\n   in order to get a better one later.\n\n## Solution\n\n```python\nclass Solution:\n    def rob(self, nums: List[int]) -> int:\n        if len(nums) < 2:\n            return sum(nums)\n        dp = [0] * len(nums)\n        dp[0] = nums[0]\n        dp[1] = max(nums[1], nums[0])\n        for i in range(2, len(nums)):\n            dp[i] = max(dp[i-1], dp[i-2] + nums[i])\n\n        return dp[len(dp)-1]\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n)\n\n## Results\n\nN/A\n\n## Next Steps\n\n* Could do well to create fewer bugs / false submissions\n\n## Notes\n\nN/A\n"
     },
     {
       "slug": "binary-tree-right-side-view",
@@ -225,8 +238,8 @@
     },
     {
       "date": "2026-01-14",
-      "count": 1,
-      "level": 2
+      "count": 2,
+      "level": 4
     },
     {
       "date": "2026-01-15",
@@ -440,37 +453,37 @@
       10,
       10,
       10,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11,
-      11
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12
     ],
     "trend": [
       1,
