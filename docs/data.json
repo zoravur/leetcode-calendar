@@ -1,6 +1,19 @@
 {
   "problems": [
     {
+      "slug": "house-robber",
+      "date": "2026-01-14",
+      "problem": "house-robber",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 10,
+      "topics": [
+        "dynamic-programming"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nI've seen this one before -- it's a classic DP problem.\n\nEvery DP problem consists of two things:\n\n1. overlapping subproblems - a problem which can be decomposed into subproblems, where each\n   subproblem is used more than once in evaluating the solution to the whole. A trivial example\n   is computing x^n: it can be decomposed in terms of x^(n%2) \\* x^(n/2) \\* x^(n/2), where x^(n/2)\n   can be computed once instead of twice / reused. This is the foundation of the exponentiation\n   by squaring algorithm which computes exponents in O(log n) time.\n2. optimal substructure - a problem where an optimal solution can be constructed efficiently from\n   an optimal solution to the subproblems. In this example, the optimal solution to determining\n   which houses to rob on the street can be decomposed as the problem of determining whether\n   to rob the current house or the house before it, provided all the houses to the left are\n   robbed optimally. To be more precise, assuming we know how best to rob the subarray \\[0, ..., i-1],\n   and \\[0, ..., i], whether to rob the (i+1)st house depends on whether the sum from \\[0, ..., i] is\n   larger than the sub from \\[0, ..., i-1] + nums\\[i]. Notice that we access the solution to the\n   subproblem \\[0, ..., i] twice, once when calculating whether to rob i+1 and once when calculating\n   i+2. If we didn't cache this with our dp array, we'd run into an exponential blowup, as each\n   problem depends on two smaller subproblems. But because they overlap, we can compute the solution\n   once instead of `2^recursion_depth`. And because of optimality, we are always going to rely\n   on the best known solution, instead of having to select a solution that isn't as good now\n   in order to get a better one later.\n\n## Solution\n\n::include{file=\"solution.py\"}\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n)\n\n## Results\n\nN/A\n\n## Next Steps\n\n* Could do well to create fewer bugs / false submissions\n\n## Notes\n\nN/A\n"
+    },
+    {
       "slug": "binary-tree-right-side-view",
       "date": "2026-01-11",
       "problem": "binary-tree-right-side-view",
@@ -212,8 +225,8 @@
     },
     {
       "date": "2026-01-14",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 2
     },
     {
       "date": "2026-01-15",
@@ -354,6 +367,16 @@
       "date": "2026-02-11",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-02-12",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-02-13",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -398,7 +421,10 @@
       "2026-02-07",
       "2026-02-08",
       "2026-02-09",
-      "2026-02-10"
+      "2026-02-10",
+      "2026-02-11",
+      "2026-02-12",
+      "2026-02-13"
     ],
     "actual": [
       1,
@@ -414,34 +440,37 @@
       10,
       10,
       10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10,
-      10
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11
     ],
     "trend": [
       1,
@@ -484,7 +513,10 @@
       38,
       39,
       40,
-      41
+      41,
+      42,
+      43,
+      44
     ]
   }
 }
