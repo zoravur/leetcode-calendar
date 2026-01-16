@@ -14,6 +14,20 @@
       "markdown": "## Approach\n\nIt's like a trie. The only wrinkle is '.' means that you need to follow all paths at the position\nyou're currently at. If you generalize the trie to a set of tries, not worrying about duplication\nbecause it's a tree, you can just iterate through every letter and maintain a solution set,\nrejecting when there's no branch to take.\n\n## Solution\n\n```python\nclass WordDictionary:\n\n    def __init__(self):\n        def trie():\n            return collections.defaultdict(trie)\n        self.trie = trie()\n\n    def addWord(self, word: str) -> None:\n        cur = self.trie\n        for c in word:\n            cur = cur[c]\n        cur[\"$\"] = True\n\n\n    def search(self, word: str) -> bool:\n        subtrees = [self.trie]\n        for c in word:\n            if len(subtrees) == 0:\n                return False\n            new_subtrees = []\n            if c == '.':\n                for subtree in subtrees:\n                    new_subtrees.extend(subtree[c] for c in subtree if c != \"$\")\n            else:\n                for subtree in subtrees:\n                    if c in subtree:\n                        new_subtrees.append(subtree[c])\n            subtrees = new_subtrees\n        return any([\"$\" in subtree for subtree in subtrees])\n        \n\n\n```\n\n## Complexity\n\n* Time: O(m)\n* Space: O(m)\n\n## Results\n\nN/A\n\n## Next Steps\n\nCould stand to test my code better. I missed an edge case where we don't extend to '$'.\n\n## Notes\n\nN/A\n"
     },
     {
+      "slug": "reverse-linked-list-ii",
+      "date": "2026-01-15",
+      "problem": "reverse-linked-list-ii",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 30,
+      "topics": [
+        "linked-list",
+        "implementation"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nIt's not particularly complicated, just tricky. There are three main steps to this problem:\n\n* Going to the node before the `left`th nodj in the linked list -- can be done easily using a dummy pointer approach; so that `cur.next` is the `left`th node\n* Reversing the linked list\n* Stitching the three pieces back together\n\nThis just requires delicate pointer surgery, which took me multiple failed attempts.\n\nBut I asked ChatGPT, and it gave me another, more elegant solution. Take for example this test case:\n\n```\n[1, 2, 3, 4, 5, 6, 7]\nleft = 3\nright = 5\n```\n\nExpected result:\n\n```\n[1, 2, 5, 4, 3, 6, 7]\n```\n\nAre you familiar with head insertion? Because that's the trick we're going to use.\n\n* You can reverse a linked list by popping from the head and inserting at the head\n  * It's like two stacks.\n* If we keep popping the next node from the from the first node, `left`, and then inserting it\n  immediately after `left - 1`, because of the way that we encounter nodes the entire list will\n  become `..., left - 1, right, right - 1, ..., left + 1, left, right + 1, right + 2, ...`\n* The grand insight here is that it's all just splicing. That's why linked list ops often come\n  in 4 assignments. 2 to remove (save removed node, and assing prev.next = node.next), and\n  2 to splice (set node.next and new prev.next = node).\n\n## Solution\n\nTwo solutions this time. Number 1 (old):\n\n```python\n# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\nclass Solution:\n    def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:\n        dummy = ListNode(next=head)\n        \n        cur = dummy\n\n        for _ in range(1, left):\n            cur = cur.next\n\n        l = cur.next\n\n        p = cur\n        r = cur.next\n        for _ in range(right - left + 1):\n            tmp = r.next\n            r.next = p\n            p = r\n            r = tmp\n        else:\n            l.next = r\n            cur.next = p\n        return dummy.next\n        \n\n```\n\nNumber 2 (ChatGPT):\n\n```python\n# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\n\nclass Solution:\n    def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:\n        if not head or left == right:\n            return head\n        \n        dummy = ListNode(0, head)\n        pre = dummy\n\n        for _ in range(left - 1):\n            pre = pre.next\n        \n        cur = pre.next\n        for _ in range(right - left):\n            nxt = cur.next\n            cur.next = nxt.next\n            nxt.next = pre.next\n            pre.next = nxt\n\n        return dummy.next\n\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n)\n\n## Results\n\n## Next Steps\n\nRemember this for next implementation\n\n## Notes\n"
+    },
+    {
       "slug": "count-good-nodes-in-binary-tree",
       "date": "2026-01-14",
       "problem": "count-good-nodes-in-binary-tree",
@@ -269,8 +283,8 @@
     },
     {
       "date": "2026-01-15",
-      "count": 1,
-      "level": 2
+      "count": 2,
+      "level": 3
     },
     {
       "date": "2026-01-16",
@@ -421,6 +435,11 @@
       "date": "2026-02-14",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-02-15",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -486,37 +505,37 @@
       10,
       10,
       13,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14,
-      14
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15
     ],
     "trend": [
       1,
