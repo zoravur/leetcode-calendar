@@ -1,6 +1,20 @@
 {
   "problems": [
     {
+      "slug": "coin-change",
+      "date": "2026-01-17",
+      "problem": "coin-change",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 0,
+      "topics": [
+        "bfs",
+        "dynamic-programming"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nI went with a BFS solution to this problem. If we view each total as a node in a graph, a BFS\nwill give us the shortest path (fewest number of coins) to the solution.\n\nDynamic programming is another approach. There, you can do it just by incrementing arrays,\nassuming no coins are negative.\n\n## Solution\n\n```python\nclass Solution:\n    def coinChange(self, coins: List[int], amount: int) -> int:\n        queue = [0]\n\n        coins.sort()\n\n        vis = set()\n        num_coins = 0\n        while len(queue) > 0 and queue[0] <= amount:\n            new_q = []\n            for total in queue:\n                if total == amount:\n                    return num_coins\n                elif total in vis:\n                    continue\n                vis.add(total)\n                new_q.extend(coin+total for coin in coins)\n            queue = new_q\n            num_coins += 1\n        return -1\n\n\n```\n\n```python\nclass Solution:\n    def coinChange(self, coins: List[int], amount: int) -> int:\n        coins.sort()\n        dp = [0] + [float('inf')] * amount\n        for i in range(amount+1):\n            for c in coins:\n                if i+c > amount:\n                    break\n                dp[i+c] = min(dp[i]+1, dp[i+c])\n        return dp[amount] if dp[amount] <= 10000 else -1\n\n```\n\n## Complexity\n\n* Time: O(nt) - because we iterate through every edge at every node, and every outdegree is t,\n  the number of coins.\n* Space: O(n) -- because there are at most n nodes, and we hit all of them\n\n## Results\n\nN/A\n\n## Next Steps\n\nTODO\n\n## Notes\n\n\\[Any additional notes]\n"
+    },
+    {
       "slug": "longest-common-subsequence",
       "date": "2026-01-16",
       "problem": "longest-common-subsequence",
@@ -317,8 +331,8 @@
     },
     {
       "date": "2026-01-17",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 2
     },
     {
       "date": "2026-01-18",
@@ -518,7 +532,8 @@
       "2026-02-12",
       "2026-02-13",
       "2026-02-14",
-      "2026-02-15"
+      "2026-02-15",
+      "2026-02-16"
     ],
     "actual": [
       1,
@@ -537,36 +552,37 @@
       13,
       15,
       17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17,
-      17
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18
     ],
     "trend": [
       1,
@@ -614,7 +630,8 @@
       43,
       44,
       45,
-      46
+      46,
+      47
     ]
   }
 }
