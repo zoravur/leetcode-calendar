@@ -1,6 +1,19 @@
 {
   "problems": [
     {
+      "slug": "reverse-bits",
+      "date": "2026-01-16",
+      "problem": "reverse-bits",
+      "source": "neetcode",
+      "difficulty": "easy",
+      "time_minutes": 5,
+      "topics": [
+        "bit-manipulation"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nDo you know your shift operators? If you don't, you should. Remember that `<<` and `>>` have higher precedence than you'd expect -- you'll have to parenthesize if the shift is computed. But once you know\nthat, you're basically just reversing a little array, with different ops. Quite unique.\n\n## Solution\n\n```python\nclass Solution:\n    def reverseBits(self, n: int) -> int:\n        print(\"{0:b}\".format(n))\n        r = 0\n        for i in range(32):\n            r |= ((n >> i) & 0b1) << (31-i)\n        print(\"{0:b}\".format(r))\n        return r\n\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n)\n\nI'm going to go with O(n) because the `length` of the number is proportional to its bit count. And\ntime complexity is specified in terms of the length of the input. If we had to reverse a 128 bit\nnumber, it'd take 128 operations.\n\n## Results\n\nN/A\n\n## Next Steps\n\nI didn't do the optimal solution. But mine is pretty good.\n\n## Notes\n\n\\[Any additional notes]\n"
+    },
+    {
       "slug": "design-word-search-data-structure",
       "date": "2026-01-15",
       "problem": "design-word-search-data-structure",
@@ -288,8 +301,8 @@
     },
     {
       "date": "2026-01-16",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 2
     },
     {
       "date": "2026-01-17",
@@ -440,6 +453,11 @@
       "date": "2026-02-15",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-02-16",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -488,7 +506,8 @@
       "2026-02-11",
       "2026-02-12",
       "2026-02-13",
-      "2026-02-14"
+      "2026-02-14",
+      "2026-02-15"
     ],
     "actual": [
       1,
@@ -506,36 +525,37 @@
       10,
       13,
       15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15,
-      15
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16
     ],
     "trend": [
       1,
@@ -582,7 +602,8 @@
       42,
       43,
       44,
-      45
+      45,
+      46
     ]
   }
 }
