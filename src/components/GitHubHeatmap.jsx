@@ -48,7 +48,7 @@ function GitHubHeatmap({ data, theme, dateRange }) {
   }, []);
 
   // Don't render if there's no data
-  if (filteredData.length === 0) {
+  if (data.length === 0) {
     return (
       <div className="heatmap-container" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
         No activity data yet. Start solving problems!
@@ -59,7 +59,7 @@ function GitHubHeatmap({ data, theme, dateRange }) {
   return (
     <div className="heatmap-container" ref={containerRef}>
       <ActivityCalendar
-        data={filteredData}
+        data={data}
         theme={explodingSquareTheme}
         colorScheme={isDark ? 'dark' : 'light'}
         blockSize={12}

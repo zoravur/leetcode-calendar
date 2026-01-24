@@ -125,8 +125,8 @@ function generateHeatmapData(problems) {
   futureDate.setDate(futureDate.getDate() + 30);
   const futureDateStr = futureDate.toISOString().split('T')[0];
 
-  // Hardcoded start date: December 31st, 2025
-  const startDateStr = '2025-12-31';
+  // Hardcoded start date: January 1st, 2026
+  const startDateStr = '2026-01-01';
 
   const heatmapData = [];
   let currentDate = startDateStr;
