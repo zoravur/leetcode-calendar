@@ -1,6 +1,21 @@
 {
   "problems": [
     {
+      "slug": "trapping-rain-water",
+      "date": "2026-01-24",
+      "problem": "trapping-rain-water",
+      "source": "neetcode",
+      "difficulty": "hard",
+      "time_minutes": 90,
+      "topics": [
+        "stack",
+        "two-pointers",
+        "dp"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nThis one was harder than I expected. I expected it to fall quickly to the monotone stack, but it put up surprising resistance.\nI just bashed my head against edge cases until I was able to do it successfully.\n\nThe idea is this: you store the highest boundaries seen so far in a decreasing monotone stack, and once you encounter a right\nboundary that is higher than some boundary on the stack, you fill up to the lower of the two boundaries, and increase the water\nlevel up to the height of that lower boundary. For instance, let's say you have this:\n\n```\n#   #\n#   #\n#@# #\n    ^\n```\n\nLet's say you encounter the right boundary. `@` represents water, `#` represents wall. When we first encounter the right boundary,\nour stack looks like \\[0, 2] (pointing to the first and second walls). On the first stage, we pop out the first lower wall (2), and\nit looks like this:\n\n```\n#   #\n#   #\n#@#@#\n```\n\nWe set `water_line = 1`. Then, when we do the next step, we don't recount the bottom layer of water and wall (3 cells). The second step\n(which is also after we exit the loop, looks like this:\n\n```\n#@@@#\n#@@@#\n#@#@#\n```\n\nAnd then we are done.\n\n## Solution\n\nThere are much better solutions, and my code is inelegant. However, I'm first committing the minimum.\n\n```python\nclass Solution:\n    def trap(self, height: List[int]) -> int:\n        stack = []\n        total = 0\n        for i, col in enumerate(height):\n            water_line = 0\n            while len(stack) > 0 and height[stack[-1]] < col:\n                j = stack[-1]\n                total += (\n                    (i - j - 1) # width of in-between cells\n                    * (min(height[j], height[i]) - water_line)\n                )\n                water_line = height[j]\n                stack.pop()\n            if len(stack) > 0:\n                j = stack[-1]\n                total += (\n                    (i - j - 1) # width of in-between cells\n                    * (min(height[j], height[i]) - water_line)\n                )\n                # print(total)\n            stack.append(i)\n        return total\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n) (O(n) additional)\n\n## Results\n\n0.028s\n\n## Next Steps\n\nI want to try the DP approach, where you simply compute the highest boundary to the left and to the right.\nI also want to try the two pointer approach, which is basically the same as DP but O(1) space by computing\nthe recurrence \"just in time\". A recurrence might not seem possible, until you realize that the water level\nwill alway increase monotonically before decreasing monotonically.\n\n## Notes\n\n\\[Any additional notes]\n"
+    },
+    {
       "slug": "count-connected-components",
       "date": "2026-01-23",
       "problem": "count-connected-components",
@@ -435,8 +450,8 @@
     },
     {
       "date": "2026-01-24",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 2
     },
     {
       "date": "2026-01-25",
@@ -582,6 +597,11 @@
       "date": "2026-02-22",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-02-23",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -638,7 +658,8 @@
       "2026-02-19",
       "2026-02-20",
       "2026-02-21",
-      "2026-02-22"
+      "2026-02-22",
+      "2026-02-23"
     ],
     "actual": [
       1,
@@ -664,36 +685,37 @@
       22,
       22,
       23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23,
-      23
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24
     ],
     "trend": [
       1,
@@ -748,7 +770,8 @@
       50,
       51,
       52,
-      53
+      53,
+      54
     ]
   }
 }
