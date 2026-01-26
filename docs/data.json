@@ -1,6 +1,20 @@
 {
   "problems": [
     {
+      "slug": "missing-number",
+      "date": "2026-01-26",
+      "problem": "missing-number",
+      "source": "neetcode",
+      "difficulty": "easy",
+      "time_minutes": 0,
+      "topics": [
+        "array",
+        "sorting"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nBecause the integers span from \\[0, .., n] except for one, and the indexes are from \\[0, ..., n-1],\nit actually makes it easy to \"bucket sort\" everything to its corresponding index. The first\nloop takes some technique -- you have to know that you need to repeatedly place all smaller elements\nthan the current, because swapping may surface an element that is smaller that is misplaced.\n\nAfter that, it's just a linear scan.\n\n## Solution\n\n```python\nclass Solution:\n    def missingNumber(self, nums: List[int]) -> int:\n        for i in range(len(nums)):\n            while nums[i] < i:\n                nums[nums[i]], nums[i] = nums[i], nums[nums[i]]\n        for i in range(len(nums)):\n            if nums[i] != i:\n                return i\n        else:\n            return len(nums)\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n) (O(1) additional)\n\n## Results\n\nBeats 100% (27 ms). Neetcode has started tracking percentiles.\n\n## Next Steps\n\nI did have some false submissions. Need to get better at producing bug-free code the first time.\n\n## Notes\n\nN/A\n"
+    },
+    {
       "slug": "delete-leaves-with-a-given-value",
       "date": "2026-01-24",
       "problem": "delete-leaves-with-a-given-value",
@@ -468,8 +482,8 @@
     },
     {
       "date": "2026-01-26",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 2
     },
     {
       "date": "2026-01-27",
@@ -610,6 +624,16 @@
       "date": "2026-02-23",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-02-24",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-02-25",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -667,7 +691,9 @@
       "2026-02-20",
       "2026-02-21",
       "2026-02-22",
-      "2026-02-23"
+      "2026-02-23",
+      "2026-02-24",
+      "2026-02-25"
     ],
     "actual": [
       1,
@@ -695,35 +721,37 @@
       23,
       25,
       25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25,
-      25
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26
     ],
     "trend": [
       1,
@@ -779,7 +807,9 @@
       51,
       52,
       53,
-      54
+      54,
+      55,
+      56
     ]
   }
 }
