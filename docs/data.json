@@ -1,6 +1,21 @@
 {
   "problems": [
     {
+      "slug": "design-twitter-feed",
+      "date": "2026-01-30",
+      "problem": "design-twitter-feed",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 25,
+      "topics": [
+        "hash-map",
+        "heap",
+        "merge"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nTwo options:\n\n1. Maintain a global list of tweets, and filter out tweets that are not followed by the current user\n2. Generate a feed by merging each user's tweets as needed, only ever processing the tweets of followees to determine the top 10.\n\nI gravitated towards the second approach because despite the efficiency of filtering a global list (which is very fast), the\ntotal number of tweets far exceeds the tweets for the set of followees. Furthermore, the worst case complexity would balloon\nfrom O(f + 10log f) = O(f) to O(n), where f is the number of followers for the user and n is the number of tweets total.\nIn most scenarios, f << u << n, where u is the number of users.\n\n## Solution\n\n```python\nimport itertools\n\nclass Twitter:\n\n    def __init__(self):\n        self.following = collections.defaultdict(set)\n        self.tweets = collections.defaultdict(list)\n        self.timeCounter = 0\n\n    def postTweet(self, userId: int, tweetId: int) -> None:\n        self.timeCounter += 1\n        self.tweets[userId].append((self.timeCounter, tweetId))\n\n    def getNewsFeed(self, userId: int) -> List[int]:\n        h = [self.tweets[followedUser][-1] + (followedUser, -1) \n            for followedUser in itertools.chain([userId], self.following[userId])\n            if len(self.tweets[followedUser]) > 0]\n\n        heapq.heapify_max(h)\n\n        result = []\n\n        for _ in range(10):\n            if len(h) == 0:\n                return result\n            _, tweetId, user, idx = heapq.heappop_max(h)\n            print(_, tweetId, user, idx)\n            result.append(tweetId)\n            if len(self.tweets[user]) < -(idx-1):\n                continue\n            heapq.heappush_max(h, self.tweets[user][idx-1] + (user, idx-1))\n\n        return result\n\n    def follow(self, followerId: int, followeeId: int) -> None:\n        if followerId == followeeId:\n            return\n        self.following[followerId].add(followeeId)\n\n    def unfollow(self, followerId: int, followeeId: int) -> None:\n        if followerId == followeeId:\n            return\n        self.following[followerId].discard(followeeId)\n\n\n```\n\n## Complexity\n\nTime:\n\n* postTweet: O(1)\n* follow: O(1)\n* unfollow: O(1)\n* getNewsFeed: O(u), where u is the number of users\n  Space:\n* O(n + u), where n, and u are the number of tweets and followers\n\n## Results\n\n* Memory: 7.9MB\n* Time: 29ms\n\n## Next Steps\n\nI made some mistakes because this was a real world data structure with some invalid operations. I should have handled them\nbetter as if it was a real API, especially considering the flavour of the question.\n\n## Notes\n"
+    },
+    {
       "slug": "merge-triplets-to-form-target",
       "date": "2026-01-27",
       "problem": "merge-triplets-to-form-target",
@@ -515,8 +530,8 @@
     },
     {
       "date": "2026-01-30",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 2
     },
     {
       "date": "2026-01-31",
@@ -652,6 +667,26 @@
       "date": "2026-02-26",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-02-27",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-02-28",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-01",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-02",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -712,7 +747,10 @@
       "2026-02-23",
       "2026-02-24",
       "2026-02-25",
-      "2026-02-26"
+      "2026-02-26",
+      "2026-02-27",
+      "2026-02-28",
+      "2026-03-01"
     ],
     "actual": [
       1,
@@ -744,34 +782,37 @@
       27,
       27,
       27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27,
-      27
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28,
+      28
     ],
     "trend": [
       1,
@@ -830,7 +871,10 @@
       54,
       55,
       56,
-      57
+      57,
+      58,
+      59,
+      60
     ]
   }
 }
