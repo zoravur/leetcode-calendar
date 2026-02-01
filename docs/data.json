@@ -1,6 +1,33 @@
 {
   "problems": [
     {
+      "slug": "find-k-closest-elements",
+      "date": "2026-02-01",
+      "problem": "find-k-closest-elements",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 5,
+      "topics": [
+        "array",
+        "two-pointers"
+      ],
+      "language": "python",
+      "markdown": "## Problem\n\nYou are given a sorted integer array arr, two integers k and x, return the k closest integers to x in the array. The result should also be sorted in ascending order.\n\nAn integer a is closer to x than an integer b if:\n\n|a - x| < |b - x|, or\n|a - x| == |b - x| and a < b\n\n[](https://neetcode.io/problems/find-k-closest-elements/question)\n\n## Approach\n\nIt's a two pointers problem. You can tell this because the array is sorted.\nAll you have to do is find the subarray that is closest to x. You start from the outside and work\nyour way in, stopping when your subarray is size k. At each step, you reject whichever element\nis further from x. You continue until your segment is size k. Because the element rejected is always\nthe one furthest away from x, and our subarray initially includes all elements, by rejecting n-k,\nyou guarantee that the remaining k are all the closest to x.\n\n## Solution\n\n```python\nclass Solution:\n    def findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:\n        i = 0\n        j = len(arr)-1\n        \n        while (j - i + 1) > k:\n            if x-arr[i] > arr[j]-x:\n                i += 1\n            else:\n                j -= 1\n        return arr[i:j+1]\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(1)\n\n## Results\n\n28ms, 8.7MB, beats 100%\n\n## Next Steps\n\nI think I could have explained this better\n\n## Notes\n\n\\[Any additional notes]\n"
+    },
+    {
+      "slug": "minimum-array-end",
+      "date": "2026-01-31",
+      "problem": "minimum-array-end",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 35,
+      "topics": [
+        "bit-manipulation"
+      ],
+      "language": "python",
+      "markdown": "## Problem\n\nYou are given two integers n and x. You have to construct an array of positive integers nums of size n where for every 0 <= i < n - 1, nums\\[i + 1] is greater than nums\\[i], and the result of the bitwise AND operation between all elements of nums is x.\n\nReturn the minimum possible value of nums\\[n - 1].\n\n## Approach\n\nThis one was tricky. But all you have to do is realize that every number must include the bits of x,\notherwise the and operation will fail. Then you need to realize that we always want to pick the\nsmallest integer bigger than the current which has the bits of x. The smallest such element is x,\nso our first element is always x and any AND operation that includes extraneous bits (besides the\nones in x) will be removed from the final result. This means that we can set the remaining bits\nhowever we like, but it's best to do it in a way that always picks the smallest integer.\n\nHow do we do that? Well, the bits in x are constrained (forced to be 1). Furthermore, among the\nremaining bits, we should \"count up in binary\". Doing so will give us the smallest final result\nbecause the ordering of integers corresponds to the lexicographic ordering of their binary strings.\n\nThis is the same trick that allows string timestamps to be compared.\n\nSo, how do we actually \"count up in binary\"? Well, all we need is the (n-1)th, element, which will\nhave the remaining bits (in lexicographic order) set according to the bits of n-1 among the bits\nnot set in x. Then it's a matter of implementation -- how do shift the bits in n-1 so that each\nplace value is shifted left the appropriate amount to a bit not set in x? I used a loop for this.\n\n## Solution\n\n```python\nclass Solution:\n    def minEnd(self, n: int, x: int) -> int:\n\n        unset_bits = ~x\n        m = 0\n\n        n = n-1\n        i = 0\n        for i in range(32):\n            if n >> i == 0:\n                break\n            lowest_unset = unset_bits & -unset_bits\n            if n & (1 << i):\n                m |= lowest_unset\n            unset_bits &= ~lowest_unset\n\n        return x | m\n\n```\n\n## Complexity\n\n* Time: O(log n)\n* Space: O(1)\n\nI know that complexity is typically defined in terms of input length, but this number is usually\nwhat they mean.\n\n## Results\n\n99th percentile\n\n## Next Steps\n\n* Memorize the \"first set bit\" trick -- I had to look it up.\n\n## Notes\n\n```\nThe smallest number will be x (it has to be).\nBeyond that, we are setting bits which are not already set.\n\nFirst example:\nn = 011, x = 010, unset bits = 101, n - 1 = 010, \naligned:\nn - 1: 1 0\nunset: 101\n010\n011\n110\n\nSecond example:\nn = 101, x = 011\n00011\n00111\n01011\n01111\n10011\n```\n"
+    },
+    {
       "slug": "design-twitter-feed",
       "date": "2026-01-30",
       "problem": "design-twitter-feed",
@@ -535,13 +562,13 @@
     },
     {
       "date": "2026-01-31",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 2
     },
     {
       "date": "2026-02-01",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 2
     },
     {
       "date": "2026-02-02",
@@ -687,6 +714,11 @@
       "date": "2026-03-02",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-03-03",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -750,7 +782,9 @@
       "2026-02-26",
       "2026-02-27",
       "2026-02-28",
-      "2026-03-01"
+      "2026-03-01",
+      "2026-03-02",
+      "2026-03-03"
     ],
     "actual": [
       1,
@@ -783,36 +817,38 @@
       27,
       27,
       28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28,
-      28
+      29,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30
     ],
     "trend": [
       1,
@@ -874,7 +910,9 @@
       57,
       58,
       59,
-      60
+      60,
+      61,
+      62
     ]
   }
 }

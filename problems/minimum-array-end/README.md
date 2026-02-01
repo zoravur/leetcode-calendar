@@ -14,7 +14,6 @@ You are given two integers n and x. You have to construct an array of positive i
 
 Return the minimum possible value of nums[n - 1].
 
-
 ## Approach
 
 This one was tricky. But all you have to do is realize that every number must include the bits of x,
@@ -41,12 +40,15 @@ place value is shifted left the appropriate amount to a bit not set in x? I used
 
 ## Complexity
 
-- Time: O(n)
-- Space: O()
+- Time: O(log n)
+- Space: O(1)
+
+I know that complexity is typically defined in terms of input length, but this number is usually 
+what they mean.
 
 ## Results
 
-[Add performance metrics here, or N/A if not applicable]
+99th percentile
 
 ## Next Steps
 
