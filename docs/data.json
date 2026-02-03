@@ -1,6 +1,21 @@
 {
   "problems": [
     {
+      "slug": "majority-element-ii",
+      "date": "2026-02-03",
+      "problem": "majority-element-ii",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 54,
+      "topics": [
+        "array",
+        "hash-map",
+        "counting"
+      ],
+      "language": "python",
+      "markdown": "## Problem\n\nYou are given an integer array nums of size n, find all elements that appear more than ⌊ n/3 ⌋ times. You can return the result in any order.\n\n## Approach\n\nThis one was kinda hard and ad-hoc. I had one failed submission. I don't know how I would explain\nhow I did this beyond acknowledging that it's a balance problem. The elements which appear\nmore than a third of the time necessarily dominate all the other elements. The size of the hashmap\nactually compensates for the reduced frequency of each individual element.\n\n## Solution\n\n```python\nclass Solution:\n    def majorityElement(self, nums: List[int]) -> List[int]:\n        result = []\n        counts = []\n\n        for num in nums:\n            try:\n                idx = result.index(num)\n                counts[idx] += 2\n            except ValueError:\n                if len(result) < 3:\n                    result.append(num)\n                    counts.append(2)\n                else: \n                    # element not in list\n                    for idx in range(len(counts)-1, -1, -1):\n                        counts[idx] -= 1\n                        if counts[idx] == 0:\n                            result = result[:idx] + result[idx+1:]\n                            counts = counts[:idx] + counts[idx+1:]\n\n        candidates = [result[i] for i in range(len(counts)) if counts[i] >= 2]\n\n        d = {c: 0 for c in candidates}\n\n        for num in nums:\n            if num in d:\n                d[num] += 1\n        return [num for num in d if d[num] > math.floor(len(nums) / 3)]\n\n\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(1)\n\n## Results\n\n* 58ms (100%)\n* 9.2MB (100%)\n\n## Next Steps\n\nMemorize the solution. I honestly don't see a better way of doing this.\nI guess I could spend more time refining my implementations. I usually stop after test cases pass.\n1 failed attempt.\n\n## Notes\n\n```\n# Start time: 8:12AM\n# Finish time: 9:06AM\n\n# seems like a \"balance\" problem.\n# because greater than a third is a sufficiently high fraction to be suspicious.\n# What would we do if we had to find all elements that appear more than \n# half the time?\n\n# If any element appears more than half the time, it is sufficient to \"annihilate\"\n# all other elements. So the question becomes, if we have a candidate, like\n# [3,4,2,2,2]\n# or \n# [2,2,3,4,2]\n# Is it possible to make it so that each of the twos, \"annihilate\" all the others?\n# If we stored a \"candidateNum\", and \"balance\" (AND \"total_seen\"), we can determine\n# whether the current most seen element represents a balance greater than a half.\n\n# I've convinced myself that a solution is possible.\n\n# Now, how would things change for the three case?\n# Well, there are three real cases; we need an algorithm for all 3:\n# 1) No dominant element\n#   - Come back to this\n# 2) One dominant element \n#   - Has to appear with fraction greater than 1/3rd.\n#   - If we always remove from the smaller element, then the 2nd and 3rd 3rd \n#     annihilate each other, leaving the first third full.\n#   - What happens if there were really 2 dominant elements?\n# 3) Two dominant elements\n#   - Well, in that case, 2 alone is sufficient to overpower the rest, _provided_\n#       1 really does dominate the rest of the elements.\n\n# Regarding the no dominant element case:\n# If we always eliminate from the smaller candidate, protecting the other, it's possible for \n# something not representing a 1/3rd fraction to rise to the top.\n\n# For instance, take this example:\n# [1,1,2,3,2,4,2,5,2,6,2,7]\n# 2 is the only dominant element. But 1 has positive balance. So that won't work.\n\n# Additionally, we can't keep track of 2s because the balance keeps hitting 0.\n# That means that you _have to_ alternate because otherwise the other element never\n# gets rotated out.\n\n# Okay, what happens if you always target the one with more?\n# [1, 1, 2, 3, 4, 2, 2] 3 > 2 = floor(7/3) -> 2 dominant\n# Here, we eliminate 1, then 1 (or 2), and then if we eliminate 1, then 2 can come, but \n# 2 will always be in the final total.\n# But one might also be in the final total. \n\n# Wait, what if you always subtracted oldest added? That doesn't seem right.\n\n# Okay, I'm confusing myself atp. Let's just try to implement something.\n```\n"
+    },
+    {
       "slug": "subsets-ii",
       "date": "2026-02-02",
       "problem": "subsets-ii",
@@ -590,8 +605,8 @@
     },
     {
       "date": "2026-02-03",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 2
     },
     {
       "date": "2026-02-04",
@@ -737,6 +752,11 @@
       "date": "2026-03-04",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-03-05",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -803,7 +823,8 @@
       "2026-03-01",
       "2026-03-02",
       "2026-03-03",
-      "2026-03-04"
+      "2026-03-04",
+      "2026-03-05"
     ],
     "actual": [
       1,
@@ -839,36 +860,37 @@
       29,
       30,
       31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31,
-      31
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32
     ],
     "trend": [
       1,
@@ -933,7 +955,8 @@
       60,
       61,
       62,
-      63
+      63,
+      64
     ]
   }
 }
