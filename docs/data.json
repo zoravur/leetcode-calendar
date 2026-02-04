@@ -1,6 +1,20 @@
 {
   "problems": [
     {
+      "slug": "minimum-stack",
+      "date": "2026-02-04",
+      "problem": "minimum-stack",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 5,
+      "topics": [
+        "stack",
+        "data-structure"
+      ],
+      "language": "python",
+      "markdown": "Design a stack class that supports the push, pop, top, and getMin operations.\n\nMinStack() initializes the stack object.\n\nvoid push(int val) pushes the element val onto the stack.\n\nvoid pop() removes the element on the top of the stack.\n\nint top() gets the top element of the stack.\n\nint getMin() retrieves the minimum element in the stack.\n\nEach function should run in O(1) time.\n\n## Approach\n\nYou have to keep track of the minimum at all times, and the minimum is computed\nto be the minimum of all the elements currently in the stack. The key is realizing\nwe don't need a heap or anything like that because we never actually have to remove\nthe smallest element. It's just a matter of dynamically updating the smallest\nvalue. This is easy to compute inductively when growing the stack -- the min of\nthe arr\\[1..n] is just min(arr\\[1..n-1], arr\\[n]). \"Undoing\" a min operation, however,\nis impossible because it destroys the information of its larger argument. Therefore, we must store what the minimum was at each step. This whole thing works because\nthe elements come out in LIFO order -- it's guaranteed that self.mini\\[i-1] is always\nthe minimum of self.stack\\[0..i].\n\n## Solution\n\n```python\nclass MinStack:\n    def __init__(self):\n        self.mini = []\n        self.stack = []\n\n    def push(self, val: int) -> None:\n        if len(self.mini) == 0:\n            self.mini.append(val)\n            self.stack.append(val)\n            return\n        self.mini.append(min(val, self.mini[-1]))\n        self.stack.append(val)\n        \n\n    def pop(self) -> None:\n        self.mini.pop()\n        self.stack.pop()\n\n    def top(self) -> int:\n        return self.stack[-1]\n\n    def getMin(self) -> int:\n        return self.mini[-1]\n\n```\n\n## Complexity\n\n* Time: O(1)\n* Space: O(n)\n\n## Results\n\n29ms (100%), 7.7MB (100%).\n\n## Next Steps\n\nNone here -- I pretty much nailed this one first try.\n\n## Notes\n\nN/A\n"
+    },
+    {
       "slug": "majority-element-ii",
       "date": "2026-02-03",
       "problem": "majority-element-ii",
@@ -610,8 +624,8 @@
     },
     {
       "date": "2026-02-04",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 2
     },
     {
       "date": "2026-02-05",
@@ -757,6 +771,11 @@
       "date": "2026-03-05",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-03-06",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -824,7 +843,8 @@
       "2026-03-02",
       "2026-03-03",
       "2026-03-04",
-      "2026-03-05"
+      "2026-03-05",
+      "2026-03-06"
     ],
     "actual": [
       1,
@@ -861,36 +881,37 @@
       30,
       31,
       32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33
     ],
     "trend": [
       1,
@@ -956,7 +977,8 @@
       61,
       62,
       63,
-      64
+      64,
+      65
     ]
   }
 }
