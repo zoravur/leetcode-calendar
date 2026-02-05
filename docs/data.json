@@ -1,6 +1,17 @@
 {
   "problems": [
     {
+      "slug": "time-based-key-value-store",
+      "date": "2026-02-05",
+      "problem": "time-based-key-value-store",
+      "source": "leetcode",
+      "difficulty": "easy",
+      "time_minutes": 0,
+      "topics": [],
+      "language": "python",
+      "markdown": "Implement a time-based key-value data structure that supports:\n\n* Storing multiple values for the same key at specified time stamps\n* Retrieving the key's value at a specified timestamp\n\nImplement the TimeMap class:\n\n* TimeMap() Initializes the object.\n* void set(String key, String value, int timestamp) Stores the key key with the value value at the given time timestamp.\n* String get(String key, int timestamp) Returns the most recent value of key if set was previously called on it and the most recent timestamp for that key prev\\_timestamp is less than or equal to the given timestamp (prev\\_timestamp <= timestamp). If there are no values, it returns \"\".\n\nNote: For all calls to set, the timestamps are in strictly increasing order.\n\n## Approach\n\nFairly straightforward, especially because O(log n) for lookup is permissible, and\nbecause timestamps are in strictly increasing order.\n\nAll we have to do is store the timestamp associated with each value, and that\nbecomes a sequence. When get is called, we just binary search the timestamps.\n\nBecause the timestamps are nondecreasing (actually, increasing), it's guaranteed\nthat each subarray is sorted.\n\n## Solution\n\n```python\nimport bisect\n\nclass TimeMap:\n    def __init__(self):\n        self.d = collections.defaultdict(list)\n\n    def set(self, key: str, value: str, timestamp: int) -> None:\n        self.d[key].append((timestamp, value))\n\n    def get(self, key: str, timestamp: int) -> str:\n        arr = self.d[key]\n        idx = bisect.bisect_right(arr, timestamp, key=lambda x: x[0])\n        if idx-1 >= 0:\n            return arr[idx-1][1]\n        return \"\"\n\n```\n\n## Complexity\n\n* Time: O(1) (set), O(log n) (get)\n* Space: O(n) (where n is the total number of elements in the data structure)\n\n## Results\n\n33ms (100%), 7.9MB (100%)\n\n## Next Steps\n\nCould stand to read the function signatures more carefully -- I missed that the\ndefault return should be an empty string, not null.\n\n## Notes\n\nN/A\n"
+    },
+    {
       "slug": "minimum-stack",
       "date": "2026-02-04",
       "problem": "minimum-stack",
@@ -629,8 +640,8 @@
     },
     {
       "date": "2026-02-05",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 2
     },
     {
       "date": "2026-02-06",
@@ -776,6 +787,11 @@
       "date": "2026-03-06",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-03-07",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -844,7 +860,8 @@
       "2026-03-03",
       "2026-03-04",
       "2026-03-05",
-      "2026-03-06"
+      "2026-03-06",
+      "2026-03-07"
     ],
     "actual": [
       1,
@@ -882,36 +899,37 @@
       31,
       32,
       33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34
     ],
     "trend": [
       1,
@@ -978,7 +996,8 @@
       62,
       63,
       64,
-      65
+      65,
+      66
     ]
   }
 }
