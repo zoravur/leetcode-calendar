@@ -1,10 +1,10 @@
 ---
 date: 2026-02-05
 problem: time-based-key-value-store
-source: leetcode
-difficulty: easy
+source: neetcode
+difficulty: medium
 time_minutes: 0
-topics: []
+topics: [array, binary-search, dictionary]
 language: python
 ---
 
