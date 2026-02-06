@@ -1,6 +1,21 @@
 {
   "problems": [
     {
+      "slug": "excel-sheet-column-title",
+      "date": "2026-02-06",
+      "problem": "excel-sheet-column-title",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 30,
+      "topics": [
+        "modulus",
+        "base-conversion",
+        "ascii"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nI had two incorrect submissions before the correct one, and many, many failed test\ncases. I'm not sure I'm qualified to explain the solution I pretty much found\nby trial and error. The idea is just to notice that to compute digits, we're\nbasically trying to find a number in base 26, except for the fact that the 26th\nnumber (which normally corresponds to \"10\", actually corresponds to \"Z\" (single digit), and there is no analog for 0. Basically, the way I solved this, is instead of\nhaving a \"0\" digit in case the modulus was equal to 0, I actually had a special\ncase which would take off an additional 26 in order to create a 0 digit. This way,\nwe rolled over at 27 (which is what we want) instead of 26. This way, we actually\nnever return \"0\" as a digit, and this is evidenced by the fact that ord('A') has 1\nsubtracted from it -- if d were 0 then we would get the ascii character before 'A'\nwhich is not a letter at all.\n\n## Solution\n\n```python\nclass Solution:\n    def convertToTitle(self, columnNumber: int) -> str:\n        digits = []\n\n        while columnNumber > 0:\n            if columnNumber % 26 == 0:\n                digits.append(26)\n                columnNumber = (columnNumber - 1) // 26\n            else:\n                digit, columnNumber = (columnNumber) % 26, (columnNumber) // 26\n                digits.append(digit)\n\n\n        print(digits)\n        return ''.join(chr(d + ord('A')-1) for d in digits[::-1])\n\n```\n\n## Complexity\n\n* Time: O(log n) (base 26!)\n* Space: O(log n)\n\n## Results\n\n27ms (100%), 7.7MB (99.39%)\n\n## Next Steps\n\nI will need to resolve this to get a better understanding of it.\n\n## Notes\n\nN/A\n"
+    },
+    {
       "slug": "invert-a-binary-tree",
       "date": "2026-02-05",
       "problem": "invert-a-binary-tree",
@@ -689,8 +704,8 @@
     },
     {
       "date": "2026-02-06",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 1
     },
     {
       "date": "2026-02-07",
@@ -836,6 +851,11 @@
       "date": "2026-03-07",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-03-08",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -905,7 +925,8 @@
       "2026-03-04",
       "2026-03-05",
       "2026-03-06",
-      "2026-03-07"
+      "2026-03-07",
+      "2026-03-08"
     ],
     "actual": [
       1,
@@ -944,36 +965,37 @@
       32,
       33,
       37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37,
-      37
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38
     ],
     "trend": [
       1,
@@ -1041,7 +1063,8 @@
       63,
       64,
       65,
-      66
+      66,
+      67
     ]
   }
 }
