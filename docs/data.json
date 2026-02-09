@@ -15,6 +15,90 @@
       "markdown": "You are given an array of strings tokens that represents a valid arithmetic expression in Reverse Polish Notation.\n\nReturn the integer that represents the evaluation of the expression.\n\n* The operands may be integers or the results of other operations.\n* The operators include '+', '-', '\\*', and '/'.\n* Assume that division between integers always truncates toward zero.\n\n## Approach\n\nReverse Polish Notation is easily evaluable using a stack approach. The rightmost argument is on the\ntop of the stack, and the argument to its left is the second highest item on the stack. When we\nencounter an op, RPN assumes that the op applies to the rightmost two arguments. Therefore, all\nwe need to do is pop the top two elements as arguments, and apply the op, and push the result back\non to the stack.\n\nThe only intricacies are 1) op order, as some operands are not commutative, and 2) a quirk of Python\nthat the integer division operator rounds towards negative infinity instead of truncating toward 0.\nAs long as you keep in mind that the first pop is the right element, and that int(a / b) is the\nidiomatic way to do a truncating division, you should be fine.\n\n## Solution\n\n```python\nclass Solution:\n    def evalRPN(self, tokens: List[str]) -> int:\n        stack = []\n        for token in tokens:\n            match token:\n                case '+':\n                    b, a = stack.pop(), stack.pop()\n                    stack.append(a + b)\n                case '-':\n                    b, a = stack.pop(), stack.pop()\n                    stack.append(a - b)\n                case '*':\n                    b, a = stack.pop(), stack.pop()\n                    stack.append(a * b)\n                case '/':\n                    b, a = stack.pop(), stack.pop()\n                    stack.append(int(a / b))\n                case _:\n                    stack.append(int(token))\n        return stack[-1]\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n)\n\n## Results\n\n30ms (100%), 7.9MB (100%)\n\n## Next Steps\n\nRemember the truncation thing. That threw me off majorly.\n\n## Notes\n\nN/A\n"
     },
     {
+      "slug": "excel-sheet-column-title",
+      "date": "2026-02-06",
+      "problem": "excel-sheet-column-title",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 30,
+      "topics": [
+        "modulus",
+        "base-conversion",
+        "ascii"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nI had two incorrect submissions before the correct one, and many, many failed test\ncases. I'm not sure I'm qualified to explain the solution I pretty much found\nby trial and error. The idea is just to notice that to compute digits, we're\nbasically trying to find a number in base 26, except for the fact that the 26th\nnumber (which normally corresponds to \"10\", actually corresponds to \"Z\" (single digit), and there is no analog for 0. Basically, the way I solved this, is instead of\nhaving a \"0\" digit in case the modulus was equal to 0, I actually had a special\ncase which would take off an additional 26 in order to create a 0 digit. This way,\nwe rolled over at 27 (which is what we want) instead of 26. This way, we actually\nnever return \"0\" as a digit, and this is evidenced by the fact that ord('A') has 1\nsubtracted from it -- if d were 0 then we would get the ascii character before 'A'\nwhich is not a letter at all.\n\n## Solution\n\n```python\nclass Solution:\n    def convertToTitle(self, columnNumber: int) -> str:\n        digits = []\n\n        while columnNumber > 0:\n            if columnNumber % 26 == 0:\n                digits.append(26)\n                columnNumber = (columnNumber - 1) // 26\n            else:\n                digit, columnNumber = (columnNumber) % 26, (columnNumber) // 26\n                digits.append(digit)\n\n\n        print(digits)\n        return ''.join(chr(d + ord('A')-1) for d in digits[::-1])\n\n```\n\n## Complexity\n\n* Time: O(log n) (base 26!)\n* Space: O(log n)\n\n## Results\n\n27ms (100%), 7.7MB (99.39%)\n\n## Next Steps\n\nI will need to resolve this to get a better understanding of it.\n\n## Notes\n\nN/A\n"
+    },
+    {
+      "slug": "invert-a-binary-tree",
+      "date": "2026-02-05",
+      "problem": "invert-a-binary-tree",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 3,
+      "topics": [
+        "binary-tree",
+        "recursion"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nJust do it! INVERT!\n\n## Solution\n\n```python\n# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\n\nclass Solution:\n    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:\n        if not root:\n            return root\n        root.left, root.right = self.invertTree(root.right), self.invertTree(root.left)\n        return root\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(1)\n\n## Results\n\n27ms (100%), 8.0MB (98.38%)\n\n## Next Steps\n\nInvert moar\n\n## Notes\n\nN/A\n"
+    },
+    {
+      "slug": "time-based-key-value-store",
+      "date": "2026-02-05",
+      "problem": "time-based-key-value-store",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 0,
+      "topics": [
+        "array",
+        "binary-search",
+        "dictionary"
+      ],
+      "language": "python",
+      "markdown": "Implement a time-based key-value data structure that supports:\n\n* Storing multiple values for the same key at specified time stamps\n* Retrieving the key's value at a specified timestamp\n\nImplement the TimeMap class:\n\n* TimeMap() Initializes the object.\n* void set(String key, String value, int timestamp) Stores the key key with the value value at the given time timestamp.\n* String get(String key, int timestamp) Returns the most recent value of key if set was previously called on it and the most recent timestamp for that key prev\\_timestamp is less than or equal to the given timestamp (prev\\_timestamp <= timestamp). If there are no values, it returns \"\".\n\nNote: For all calls to set, the timestamps are in strictly increasing order.\n\n## Approach\n\nFairly straightforward, especially because O(log n) for lookup is permissible, and\nbecause timestamps are in strictly increasing order.\n\nAll we have to do is store the timestamp associated with each value, and that\nbecomes a sequence. When get is called, we just binary search the timestamps.\n\nBecause the timestamps are nondecreasing (actually, increasing), it's guaranteed\nthat each subarray is sorted.\n\n## Solution\n\n```python\nimport bisect\n\nclass TimeMap:\n    def __init__(self):\n        self.d = collections.defaultdict(list)\n\n    def set(self, key: str, value: str, timestamp: int) -> None:\n        self.d[key].append((timestamp, value))\n\n    def get(self, key: str, timestamp: int) -> str:\n        arr = self.d[key]\n        idx = bisect.bisect_right(arr, timestamp, key=lambda x: x[0])\n        if idx-1 >= 0:\n            return arr[idx-1][1]\n        return \"\"\n\n```\n\n## Complexity\n\n* Time: O(1) (set), O(log n) (get)\n* Space: O(n) (where n is the total number of elements in the data structure)\n\n## Results\n\n33ms (100%), 7.9MB (100%)\n\n## Next Steps\n\nCould stand to read the function signatures more carefully -- I missed that the\ndefault return should be an empty string, not null.\n\n## Notes\n\nN/A\n"
+    },
+    {
+      "slug": "transpose-matrix",
+      "date": "2026-02-05",
+      "problem": "transpose-matrix",
+      "source": "neetcode",
+      "difficulty": "easy",
+      "time_minutes": 1,
+      "topics": [
+        "implementation"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nHow does the solution work? Let's step through:\n\n```\nmatrix -> [[1,2],[3,4]]\nzip(*matrix) -> zip([1, 2], [3, 4])\nlist(zip(*matrix)) -> ([(1, 3), (2, 4)]\n```\n\nThis solution relies on the fact that zip accepts any number of arguments, and hence as many as the number of columns in the\nmatrix.\n\nWe convert to a list so that it doesn't return a generator. However, this returns a list of tuples (technically wrong).\n\nIf we strictly care about returning a list of lists, we must do `[list(r) for r in zip(*matrix)]`.\n\n## Solution\n\n```python\nclass Solution:\n    def transpose(self, matrix: List[List[int]]) -> List[List[int]]:\n        return list(zip(*matrix))\n\n```\n\n## Complexity\n\n* Time: O(n\\*m)\n* Space: O(n\\*m) -- building up a new matrix\n\n## Results\n\n27ms (100%), 7.9MB (96.56%)\n\n## Next Steps\n\nSomething ergonomic for in-place too?\n\n## Notes\n\nN/A\n"
+    },
+    {
+      "slug": "verifying-an-alien-dictionary",
+      "date": "2026-02-05",
+      "problem": "verifying-an-alien-dictionary",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 7,
+      "topics": [
+        "lexicographic-ordering"
+      ],
+      "language": "python",
+      "markdown": "In an alien language, surprisingly, they also use English lowercase letters, but possibly in a different order. The order of the alphabet is some permutation of lowercase letters.\n\nGiven a sequence of words written in the alien language, and the order of the alphabets, return true if and only if the given words are sorted lexicographically in this alien language.\n\n## Approach\n\nIf you know how to sort lexicographically, you know how to check if two items are sorted. The only thing weird about this is the different ordering of the characters, but, but if you replace the key from being the char itself (which compares based\non ascii) with the index in the order list, the problem reduces to verifying a sort.\n\n## Solution\n\n```python\nclass Solution:\n    def isAlienSorted(self, words: List[str], order: str) -> bool:\n        order = {c: i for i, c in enumerate(order)}\n        \n        for w1, w2 in zip(words, words[1:]):\n            for c1, c2 in zip(w1, w2):\n                if order[c1] > order[c2]:\n                    return False\n                elif order[c1] < order[c2]:\n                    break\n            else:\n                if len(w1) > len(w2):\n                    return False\n\n        return True\n\n```\n\n## Complexity\n\n* Time: O(n), where n is the length of the input in bytes\n* Space: O(1), because the dictionary is always 26 letters.\n\n## Results\n\n28ms (100%), 7.7MB (100%)\n\n## Next Steps\n\nNone.\n\n## Notes\n\nN/A\n"
+    },
+    {
+      "slug": "minimum-stack",
+      "date": "2026-02-04",
+      "problem": "minimum-stack",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 5,
+      "topics": [
+        "stack",
+        "data-structure"
+      ],
+      "language": "python",
+      "markdown": "Design a stack class that supports the push, pop, top, and getMin operations.\n\nMinStack() initializes the stack object.\n\nvoid push(int val) pushes the element val onto the stack.\n\nvoid pop() removes the element on the top of the stack.\n\nint top() gets the top element of the stack.\n\nint getMin() retrieves the minimum element in the stack.\n\nEach function should run in O(1) time.\n\n## Approach\n\nYou have to keep track of the minimum at all times, and the minimum is computed\nto be the minimum of all the elements currently in the stack. The key is realizing\nwe don't need a heap or anything like that because we never actually have to remove\nthe smallest element. It's just a matter of dynamically updating the smallest\nvalue. This is easy to compute inductively when growing the stack -- the min of\nthe arr\\[1..n] is just min(arr\\[1..n-1], arr\\[n]). \"Undoing\" a min operation, however,\nis impossible because it destroys the information of its larger argument. Therefore, we must store what the minimum was at each step. This whole thing works because\nthe elements come out in LIFO order -- it's guaranteed that self.mini\\[i-1] is always\nthe minimum of self.stack\\[0..i].\n\n## Solution\n\n```python\nclass MinStack:\n    def __init__(self):\n        self.mini = []\n        self.stack = []\n\n    def push(self, val: int) -> None:\n        if len(self.mini) == 0:\n            self.mini.append(val)\n            self.stack.append(val)\n            return\n        self.mini.append(min(val, self.mini[-1]))\n        self.stack.append(val)\n        \n\n    def pop(self) -> None:\n        self.mini.pop()\n        self.stack.pop()\n\n    def top(self) -> int:\n        return self.stack[-1]\n\n    def getMin(self) -> int:\n        return self.mini[-1]\n\n```\n\n## Complexity\n\n* Time: O(1)\n* Space: O(n)\n\n## Results\n\n29ms (100%), 7.7MB (100%).\n\n## Next Steps\n\nNone here -- I pretty much nailed this one first try.\n\n## Notes\n\nN/A\n"
+    },
+    {
       "slug": "majority-element-ii",
       "date": "2026-02-03",
       "problem": "majority-element-ii",
@@ -455,22 +539,22 @@
     {
       "date": "2026-01-01",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-01-02",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-01-03",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-01-04",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-01-05",
@@ -480,17 +564,17 @@
     {
       "date": "2026-01-06",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-01-07",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-01-08",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-01-09",
@@ -500,12 +584,12 @@
     {
       "date": "2026-01-10",
       "count": 2,
-      "level": 3
+      "level": 2
     },
     {
       "date": "2026-01-11",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-01-12",
@@ -520,32 +604,32 @@
     {
       "date": "2026-01-14",
       "count": 3,
-      "level": 4
+      "level": 3
     },
     {
       "date": "2026-01-15",
       "count": 2,
-      "level": 3
+      "level": 2
     },
     {
       "date": "2026-01-16",
       "count": 2,
-      "level": 3
+      "level": 2
     },
     {
       "date": "2026-01-17",
       "count": 2,
-      "level": 3
+      "level": 2
     },
     {
       "date": "2026-01-18",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-01-19",
       "count": 2,
-      "level": 3
+      "level": 2
     },
     {
       "date": "2026-01-20",
@@ -565,12 +649,12 @@
     {
       "date": "2026-01-23",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-01-24",
       "count": 2,
-      "level": 3
+      "level": 2
     },
     {
       "date": "2026-01-25",
@@ -580,12 +664,12 @@
     {
       "date": "2026-01-26",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-01-27",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-01-28",
@@ -600,42 +684,42 @@
     {
       "date": "2026-01-30",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-01-31",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-02-01",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-02-02",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-02-03",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-02-04",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 1
     },
     {
       "date": "2026-02-05",
-      "count": 0,
-      "level": 0
+      "count": 4,
+      "level": 4
     },
     {
       "date": "2026-02-06",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 1
     },
     {
       "date": "2026-02-07",
@@ -650,7 +734,7 @@
     {
       "date": "2026-02-09",
       "count": 1,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-02-10",
@@ -911,42 +995,42 @@
       30,
       31,
       32,
-      32,
-      32,
-      32,
-      32,
-      32,
       33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33,
-      33
+      37,
+      38,
+      38,
+      38,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39
     ],
     "trend": [
       1,
