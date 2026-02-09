@@ -1,6 +1,20 @@
 {
   "problems": [
     {
+      "slug": "evaluate-reverse-polish-notation",
+      "date": "2026-02-09",
+      "problem": "evaluate-reverse-polish-notation",
+      "source": "leetcode",
+      "difficulty": "medium",
+      "time_minutes": 25,
+      "topics": [
+        "stack",
+        "arithmetic"
+      ],
+      "language": "python",
+      "markdown": "You are given an array of strings tokens that represents a valid arithmetic expression in Reverse Polish Notation.\n\nReturn the integer that represents the evaluation of the expression.\n\n* The operands may be integers or the results of other operations.\n* The operators include '+', '-', '\\*', and '/'.\n* Assume that division between integers always truncates toward zero.\n\n## Approach\n\nReverse Polish Notation is easily evaluable using a stack approach. The rightmost argument is on the\ntop of the stack, and the argument to its left is the second highest item on the stack. When we\nencounter an op, RPN assumes that the op applies to the rightmost two arguments. Therefore, all\nwe need to do is pop the top two elements as arguments, and apply the op, and push the result back\non to the stack.\n\nThe only intricacies are 1) op order, as some operands are not commutative, and 2) a quirk of Python\nthat the integer division operator rounds towards negative infinity instead of truncating toward 0.\nAs long as you keep in mind that the first pop is the right element, and that int(a / b) is the\nidiomatic way to do a truncating division, you should be fine.\n\n## Solution\n\n```python\nclass Solution:\n    def evalRPN(self, tokens: List[str]) -> int:\n        stack = []\n        for token in tokens:\n            match token:\n                case '+':\n                    b, a = stack.pop(), stack.pop()\n                    stack.append(a + b)\n                case '-':\n                    b, a = stack.pop(), stack.pop()\n                    stack.append(a - b)\n                case '*':\n                    b, a = stack.pop(), stack.pop()\n                    stack.append(a * b)\n                case '/':\n                    b, a = stack.pop(), stack.pop()\n                    stack.append(int(a / b))\n                case _:\n                    stack.append(int(token))\n        return stack[-1]\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n)\n\n## Results\n\n30ms (100%), 7.9MB (100%)\n\n## Next Steps\n\nRemember the truncation thing. That threw me off majorly.\n\n## Notes\n\nN/A\n"
+    },
+    {
       "slug": "majority-element-ii",
       "date": "2026-02-03",
       "problem": "majority-element-ii",
@@ -635,8 +649,8 @@
     },
     {
       "date": "2026-02-09",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 2
     },
     {
       "date": "2026-02-10",
@@ -757,6 +771,36 @@
       "date": "2026-03-05",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-03-06",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-07",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-08",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-09",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-10",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-11",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -824,7 +868,13 @@
       "2026-03-02",
       "2026-03-03",
       "2026-03-04",
-      "2026-03-05"
+      "2026-03-05",
+      "2026-03-06",
+      "2026-03-07",
+      "2026-03-08",
+      "2026-03-08",
+      "2026-03-09",
+      "2026-03-10"
     ],
     "actual": [
       1,
@@ -866,31 +916,37 @@
       32,
       32,
       32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32,
-      32
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33
     ],
     "trend": [
       1,
@@ -956,7 +1012,13 @@
       61,
       62,
       63,
-      64
+      64,
+      65,
+      66,
+      67,
+      67,
+      68,
+      69
     ]
   }
 }
