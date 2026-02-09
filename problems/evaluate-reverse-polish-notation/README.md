@@ -1,5 +1,5 @@
 ---
-date: 2026-02-09
+date: 2026-02-08
 problem: evaluate-reverse-polish-notation
 source: leetcode
 difficulty: medium
