@@ -1,6 +1,19 @@
 {
   "problems": [
     {
+      "slug": "meeting-schedule",
+      "date": "2026-02-10",
+      "problem": "meeting-schedule",
+      "source": "neetcode",
+      "difficulty": "easy",
+      "time_minutes": 10,
+      "topics": [
+        "intervals"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nSort intervals and check if end of previous meeting ever exceeds start of next.\n\n## Solution\n\n```python\n\"\"\"\nDefinition of Interval:\nclass Interval(object):\n    def __init__(self, start, end):\n        self.start = start\n        self.end = end\n\"\"\"\n\nclass Solution:\n    def canAttendMeetings(self, intervals: List[Interval]) -> bool:\n        # Okay, we have a bunch of intervals.\n        # How can we determine if any two intervals overlap?\n        # What if we had a single array, of start and end times,\n        # annotated with START or END? Then if there's ever two consecutive starts,\n        # that means it's over.\n\n        # Okay, I checked the recommended complexity -- nlogn n, which is exactly what I\n        # expected for my solution. Time to implement.\n\n        # for inter in intervals:\n        #     start, end = inter.start, inter.end\n            \n        # Wait, we can literally just sort? Using a priority queue doesn't change the\n        # complexity at all.\n\n        intervals = [(inter.start, inter.end) for inter in intervals]\n\n        intervals.sort()\n        for (_, end), (start, _) in zip(intervals, intervals[1:]):\n            if end > start:\n                return False\n        return True\n\n        # Okay, now I can probably do some test cases.\n        # First of all, let's check the examples.\n        # Test case: touching\n        # Test case: test case, same start, different end\n\n        # Okay, it all passed. Time to submit.\n\n\n```\n\n## Complexity\n\n* Time: O(nlogn)\n* Space: O(n)\n\n## Results\n\n28ms (100%), 7.9MB (97.50%) -- judge is a bit weird though\n\n## Next Steps\n\nOne-shotted this one. I could start using the stopwatch / timer and calculate times more precisely.\n\n## Notes\n\nSee solution\n"
+    },
+    {
       "slug": "longest-repeating-substring-with-replacement",
       "date": "2026-02-09",
       "problem": "longest-repeating-substring-with-replacement",
@@ -752,8 +765,8 @@
     },
     {
       "date": "2026-02-10",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 1
     },
     {
       "date": "2026-02-11",
@@ -899,6 +912,11 @@
       "date": "2026-03-11",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-03-12",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -972,7 +990,8 @@
       "2026-03-08",
       "2026-03-08",
       "2026-03-09",
-      "2026-03-10"
+      "2026-03-10",
+      "2026-03-11"
     ],
     "actual": [
       1,
@@ -1015,36 +1034,37 @@
       38,
       39,
       40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41,
+      41
     ],
     "trend": [
       1,
@@ -1116,7 +1136,8 @@
       67,
       67,
       68,
-      69
+      69,
+      70
     ]
   }
 }
