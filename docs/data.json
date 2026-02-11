@@ -1,6 +1,19 @@
 {
   "problems": [
     {
+      "slug": "partition-to-k-equal-sum-subsets",
+      "date": "2026-02-11",
+      "problem": "partition-to-k-equal-sum-subsets",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 0,
+      "topics": [
+        "backtracking"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nBacktracking approach. No real method, besides the fact that I remove elements from the array\nwhen the partition is found.\n\n## Solution\n\n```python\nclass Solution:\n    def canPartitionKSubsets(self, nums: List[int], k: int) -> bool:\n        # first, sum(nums) and k together determine the target for each subset.\n        # second, it's a matter of hitting the target sum(nums) / k.\n\n        # Honestly, if we could do this is linear time I'd be very impressed.\n        # nlogn is pretty much the next best thing, which is equivalent to sorting \n        # in any case. And once we've sorted,\n\n        # wait a second, even if we did sort, two pointers approach wouldn't work here.\n        \n        # It's kind of like two-sum, honestly. \n\n        # And why is the frequency of each element no more than 4? \n        # And why is nums.length only 16? Maybe we need to backtrack?\n\n        # Let's try backtracking first, at least.\n\n        if sum(nums) % k != 0:\n            return False\n        target = sum(nums) / k\n        \n        def recPartition(nums, i, k):\n            if k == 0:\n                # print(\"Found partition\")\n                return []\n            if i == len(nums) or k < 0:\n                return None\n\n            res = recPartition(nums, i+1, k-nums[i])\n            if res is not None:\n                res.append(i)\n                return res\n            res = recPartition(nums, i+1, k)\n            if res is not None:\n                return res\n            return None\n\n        for _ in range(k-1):\n            partition = recPartition(nums, 0, target)\n            if partition is None:\n                return False\n            nums = [num for i, num in enumerate(nums) if i not in partition]\n\n        return True\n\n```\n\n## Complexity\n\n* Time: O(2^n)\n* Space: O(n)\n\n## Results\n\n27ms, 7.9MB\n\n## Next Steps\n\nLess memory hungry, check test cases better -- one large test case (bounds) is useful.\n\n## Notes\n\nSee solution.\n"
+    },
+    {
       "slug": "meeting-schedule",
       "date": "2026-02-10",
       "problem": "meeting-schedule",
@@ -770,8 +783,8 @@
     },
     {
       "date": "2026-02-11",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 1
     },
     {
       "date": "2026-02-12",
@@ -917,6 +930,11 @@
       "date": "2026-03-12",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-03-13",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -991,7 +1009,8 @@
       "2026-03-08",
       "2026-03-09",
       "2026-03-10",
-      "2026-03-11"
+      "2026-03-11",
+      "2026-03-12"
     ],
     "actual": [
       1,
@@ -1035,36 +1054,37 @@
       39,
       40,
       41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41,
-      41
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42,
+      42
     ],
     "trend": [
       1,
@@ -1137,7 +1157,8 @@
       67,
       68,
       69,
-      70
+      70,
+      71
     ]
   }
 }
