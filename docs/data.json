@@ -1,6 +1,19 @@
 {
   "problems": [
     {
+      "slug": "jump-game-ii",
+      "date": "2026-02-16",
+      "problem": "jump-game-ii",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 10,
+      "topics": [
+        "array"
+      ],
+      "language": "python",
+      "markdown": "You are given an array of integers nums, where nums\\[i] represents the maximum length of a jump towards the right from index i. For example, if you are at nums\\[i], you can jump to any index i + j where:\n\n* j <= nums\\[i]\n* i + j < nums.length\n* You are initially positioned at nums\\[0].\n\nReturn the minimum number of jumps to reach the last position in the array (index nums.length - 1). You may assume there is always a valid answer.\n\n## Approach\n\nI pretty much went with a DP approach. It is O(n \\* m), where n is the\nnumber of cells, and m is the max jump distance.\n\n## Solution\n\n```python\nclass Solution:\n    def jump(self, nums: List[int]) -> int:\n        dp = [0] + [float('inf')] * (len(nums) - 1)\n        for i in range(len(nums)):\n            for j in range(min(nums[i]+1, len(nums)-i)):\n                dp[i+j] = min(dp[i] + 1, dp[i+j])\n        # print(dp)\n        return dp[-1]\n\n```\n\n## Complexity\n\n* Time: O(n\\*m)\n* Space: O(n)\n\n## Results\n\n29ms, 7.8MB\n\n## Next Steps\n\nCould be improved by using a min-max window, according to the solution.\nI guess this would work, because if index k is reachable, k-1 is\nreachable as well, because whichever step reaches k from an index\nbefore k, that starting position can also reach k - 1. This is\nsuffficient to realize an optimal solution.\n\nAll you would have to do, is whenever you extend a window, check the\nfurthest reachable cells by iterating through the cells which have been\nadded.\n\nEasy money.\n\n## Notes\n"
+    },
+    {
       "slug": "partition-to-k-equal-sum-subsets",
       "date": "2026-02-11",
       "problem": "partition-to-k-equal-sum-subsets",
@@ -808,8 +821,8 @@
     },
     {
       "date": "2026-02-16",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 1
     },
     {
       "date": "2026-02-17",
@@ -935,6 +948,31 @@
       "date": "2026-03-13",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-03-14",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-15",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-16",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-17",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-18",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -1010,7 +1048,12 @@
       "2026-03-09",
       "2026-03-10",
       "2026-03-11",
-      "2026-03-12"
+      "2026-03-12",
+      "2026-03-13",
+      "2026-03-14",
+      "2026-03-15",
+      "2026-03-16",
+      "2026-03-17"
     ],
     "actual": [
       1,
@@ -1059,32 +1102,37 @@
       42,
       42,
       42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42,
-      42
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43
     ],
     "trend": [
       1,
@@ -1158,7 +1206,12 @@
       68,
       69,
       70,
-      71
+      71,
+      72,
+      73,
+      74,
+      75,
+      76
     ]
   }
 }
