@@ -1,6 +1,35 @@
 {
   "problems": [
     {
+      "slug": "foreign-dictionary",
+      "date": "2026-02-19",
+      "problem": "foreign-dictionary",
+      "source": "neetcode",
+      "difficulty": "hard",
+      "time_minutes": 56,
+      "topics": [
+        "lexicographic-ordering",
+        "topological-sort"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nThe approach here is to first determine a partial order based on the items in the dictionary.\nObviously, the orders in which the first letter of each word appears corresponds to the order of\nthe dictionary. Similarly, at each level, we group the words by common prefix up to i, and then\ncompare the i'th letter. This way, we generate every implied order in the dictionary.\n\nWe take each ordering implied by the dictionary (call it a chain), and generate a dependency graph\nfrom it. This can then be used in a standard topological sort, which will tell us a candidate\nordering.\n\nLastly, we verify the ordering, because the solution that I came up with will generate an invalid\norder if the test case is invalid. A quick and dirty way to do this is to verify the candidate\nordering again. If the validation fails, there must not be any valid ordering, because the algorithm\nis guaranteed to generate a valid one if it exists.\n\n## Solution\n\n```python\nclass Solution:\n    def foreignDictionary(self, words: List[str]) -> str:\n        # Can determine partial order by bucketing words\n        # Can determine candidate total order through topological sort I think\n\n        # Topological sorts work only on DAGs\n\n        # It makes sense that we should have a DAG after order determining.\n\n        nested = lambda: defaultdict(nested)\n\n        d = nested()\n\n        for word in words:\n            cur = d\n            for c in word:\n                if c in cur:\n                    if c != cur['last']:\n                        return ''\n                cur['last'] = c\n                cur = cur[c]\n\n        dicts = [d]\n\n        chains = []\n        while len(dicts) > 0:\n            new_dicts = []\n            for cur in dicts:\n                chain = [k for k in cur if k != 'last']\n                new_dicts.extend(cur[k] for k in chain)\n                chains.append(chain)\n            dicts = new_dicts\n\n        # print(chains)\n\n        g = defaultdict(list)\n\n        for chain in chains:\n            for node in chain:\n                g[node]\n            for s, e in zip(chain, chain[1:]):\n                g[e].append(s)\n\n        # print(g)\n        \n        # g (our graph. Time to topo-sort)\n        result = []\n\n        visited = set()\n        def dfs(node, iteration=0):\n            if node in visited:\n                return\n            visited.add(node)\n            for adj in g[node]:\n                dfs(adj, iteration)\n            result.append(node)\n\n        for node in list(g.keys()):\n            dfs(node)\n\n        # copy pasted from verify alien dict\n        order = {c: i for i, c in enumerate(result)}\n        \n        for w1, w2 in zip(words, words[1:]):\n            for c1, c2 in zip(w1, w2):\n                if order[c1] > order[c2]:\n                    return ''\n                elif order[c1] < order[c2]:\n                    break\n            else:\n                if len(w1) > len(w2):\n                    return ''\n\n        return ''.join(result)\n\n```\n\n## Complexity\n\n* Time: O(n\\*m), where n, m are the number and length of words, respectively\n* Space: O(n)\n\n## Results\n\n\\[Add performance metrics here, or N/A if not applicable]\n\n## Next Steps\n\nSolution is quite slow, could be significantly faster\n\n## Notes\n\nSee solution\n"
+    },
+    {
+      "slug": "plus-one",
+      "date": "2026-02-19",
+      "problem": "plus-one",
+      "source": "neetcode",
+      "difficulty": "easy",
+      "time_minutes": 5,
+      "topics": [
+        "array",
+        "math",
+        "addition"
+      ],
+      "language": "python",
+      "markdown": "You are given an integer array digits, where each digits\\[i] is the ith digit of a large integer. It is ordered from most significant to least significant digit, and it will not contain any leading zero.\n\nReturn the digits of the given integer after incrementing it by one.\n\n## Approach\n\nWe simulate the addition operation (ripple carry).\n\n## Solution\n\n```python\nclass Solution:\n    def plusOne(self, digits: List[int]) -> List[int]:\n        carry = 1\n        i = len(digits) - 1\n        while i >= 0:\n            digits[i] += carry\n            carry = 0\n            if digits[i] == 10:\n                digits[i] = 0\n                carry = 1\n            i -= 1\n            if carry == 0:\n                break\n        else:\n            digits = [1] + digits\n\n        return digits\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(1) additional\n\n## Results\n\n28ms, 7.9MB\n\n## Next Steps\n\nThe code could be significantly cleaner.\n\n## Notes\n\nN/A\n"
+    },
+    {
       "slug": "jump-game-ii",
       "date": "2026-02-16",
       "problem": "jump-game-ii",
@@ -836,8 +865,8 @@
     },
     {
       "date": "2026-02-19",
-      "count": 0,
-      "level": 0
+      "count": 2,
+      "level": 2
     },
     {
       "date": "2026-02-20",
@@ -973,6 +1002,21 @@
       "date": "2026-03-18",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-03-19",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-20",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-21",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -1053,7 +1097,10 @@
       "2026-03-14",
       "2026-03-15",
       "2026-03-16",
-      "2026-03-17"
+      "2026-03-17",
+      "2026-03-18",
+      "2026-03-19",
+      "2026-03-20"
     ],
     "actual": [
       1,
@@ -1105,34 +1152,37 @@
       43,
       43,
       43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45,
+      45
     ],
     "trend": [
       1,
@@ -1211,7 +1261,10 @@
       73,
       74,
       75,
-      76
+      76,
+      77,
+      78,
+      79
     ]
   }
 }
