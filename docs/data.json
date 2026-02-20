@@ -1,6 +1,19 @@
 {
   "problems": [
     {
+      "slug": "coin-change-ii",
+      "date": "2026-02-20",
+      "problem": "coin-change-ii",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 25,
+      "topics": [
+        "dynamic-programmnig"
+      ],
+      "language": "python",
+      "markdown": "You are given an integer array coins representing coins of different denominations (e.g. 1 dollar, 5 dollars, etc) and an integer amount representing a target amount of money.\n\nReturn the number of distinct combinations that total up to amount. If it's impossible to make up the amount, return 0.\n\nYou may assume that you have an unlimited number of each coin and that each value in coins is unique.\n\n## Approach\n\nThe approach I used was to use DP. My initial attempt was top-down, but that ran into space\nrequirements so I switched to bottom-up. With bottom-up the approach was fairly simple, although\nI did originally make the mistake of counting permutations. The key is to realize that once\nyou stop adding a coin, you can't go back to it, as that would generate a permutation (addition order)\nthat is not sorted in the initial order of the coins. By always maintaining sorted order, we don't\nhave to deduplicate, and simply never generate duplicate permutations in the first place.\n\nThen the DP was straightforward. In fact, it's kind of like a Dyck path -- at each step, take one\nstep to the right (change coin denomination) or take one step up (add one more of the current coin).\nPath counting the Dyck paths is all we need to generate our solution.\n\n## Solution\n\n```python\nclass Solution:\n    def change(self, amount: int, coins: List[int]) -> int:\n        # It seems like DP would be our approach here -- feels pascal-triangles / \n        # path-counting ish.\n        # so, basically the problem is, how many coins does it take to make target\n        # t? well that's just \n\n        # result = sum[change(t - coin) for coin in coins]\n        # with base case 0 if t < 0 (or 1 if t == 0).\n\n        # top down dp would be fastest atp.\n\n        # import functools\n\n        # @functools.cache\n        # def change_rec(t, k):\n        #     if t < 0:\n        #         return 0\n        #     if t == 0:\n        #         return 1\n        #     total = sum(change_rec(t - coins[i], i+1) for i in range(k))\n        #     # print(t, total)\n        #     return total\n\n        # return change_rec(amount, len(coins))\n\n        # getting stack overflow issues, whcih is surprising\n        # whatever, bottom up dp it is\n\n        dp = [[1] + [0] * amount for _ in range(len(coins))]\n\n        for t in range(1, amount+1):\n            for i in range(len(coins)):\n                dp[i][t] = dp[i-1][t]\n                if t-coins[i] >= 0:\n                    dp[i][t] += dp[i][t-coins[i]]\n        # print(dp)\n        return dp[-1][amount]\n\n\n```\n\n## Complexity\n\n* Time: O(n \\* k) -- n is the amount, and is the number of coins\n* Space: O(n \\* k) additional -- as above\n\n## Results\n\n60ms, 8.8MB\n\n## Next Steps\n\nI could try implementing a more optimal solution -- DP problems that depend only on the previous row\nis a good heuristic for getting memory down.\n\n## Notes\n\nSee solution.\n"
+    },
+    {
       "slug": "foreign-dictionary",
       "date": "2026-02-19",
       "problem": "foreign-dictionary",
@@ -870,8 +883,8 @@
     },
     {
       "date": "2026-02-20",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 1
     },
     {
       "date": "2026-02-21",
@@ -1017,6 +1030,11 @@
       "date": "2026-03-21",
       "count": 0,
       "level": 0
+    },
+    {
+      "date": "2026-03-22",
+      "count": 0,
+      "level": 0
     }
   ],
   "cumulativeData": {
@@ -1100,7 +1118,8 @@
       "2026-03-17",
       "2026-03-18",
       "2026-03-19",
-      "2026-03-20"
+      "2026-03-20",
+      "2026-03-21"
     ],
     "actual": [
       1,
@@ -1153,36 +1172,37 @@
       43,
       43,
       45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45,
-      45
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46,
+      46
     ],
     "trend": [
       1,
@@ -1264,7 +1284,8 @@
       76,
       77,
       78,
-      79
+      79,
+      80
     ]
   }
 }
