@@ -1,6 +1,20 @@
 {
   "problems": [
     {
+      "slug": "redundant-connection",
+      "date": "2026-02-23",
+      "problem": "redundant-connection",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 40,
+      "topics": [
+        "union-find",
+        "cycle-detection"
+      ],
+      "language": "cpp",
+      "markdown": "You are given a connected undirected graph with n nodes labeled from 1 to n. Initially, it contained no cycles and consisted of n-1 edges.\n\nWe have now added one additional edge to the graph. The edge has two different vertices chosen from 1 to n, and was not an edge that previously existed in the graph.\n\nThe graph is represented as an array edges of length n where edges\\[i] = \\[ai, bi] represents an edge between nodes ai and bi in the graph.\n\nReturn an edge that can be removed so that the graph is still a connected non-cyclical graph. If there are multiple answers, return the edge that appears last in the input edges.\n\n## Approach\n\nThe idea is that we use a disjoint set data structure. As soon as we try to connect two nodes in the same set\ntogether, there must already exist a path between them, which means that that is the last edge of a cycle.\n\n## Solution\n\n::include{file=\"solution.cpp\"}\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n)\n\n## Results\n\n2ms (92.62%), 152.9MB (6.82%)\n\n## Next Steps\n\nNext time, do this without looking up union-find.\n\n## Notes\n\nN/A\n"
+    },
+    {
       "slug": "excel-sheet-column-title",
       "date": "2026-02-06",
       "problem": "excel-sheet-column-title",
@@ -789,8 +803,8 @@
     },
     {
       "date": "2026-02-23",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 1
     },
     {
       "date": "2026-02-24",
@@ -854,6 +868,91 @@
     },
     {
       "date": "2026-03-08",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-09",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-10",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-11",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-12",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-13",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-14",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-15",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-16",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-17",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-18",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-19",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-20",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-21",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-22",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-23",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-24",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-03-25",
       "count": 0,
       "level": 0
     }
@@ -926,7 +1025,24 @@
       "2026-03-05",
       "2026-03-06",
       "2026-03-07",
-      "2026-03-08"
+      "2026-03-08",
+      "2026-03-08",
+      "2026-03-09",
+      "2026-03-10",
+      "2026-03-11",
+      "2026-03-12",
+      "2026-03-13",
+      "2026-03-14",
+      "2026-03-15",
+      "2026-03-16",
+      "2026-03-17",
+      "2026-03-18",
+      "2026-03-19",
+      "2026-03-20",
+      "2026-03-21",
+      "2026-03-22",
+      "2026-03-23",
+      "2026-03-24"
     ],
     "actual": [
       1,
@@ -982,20 +1098,37 @@
       38,
       38,
       38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39
     ],
     "trend": [
       1,
@@ -1064,7 +1197,24 @@
       64,
       65,
       66,
-      67
+      67,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83
     ]
   }
 }
