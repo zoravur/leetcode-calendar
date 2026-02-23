@@ -15,6 +15,171 @@
       "markdown": "You are given a connected undirected graph with n nodes labeled from 1 to n. Initially, it contained no cycles and consisted of n-1 edges.\n\nWe have now added one additional edge to the graph. The edge has two different vertices chosen from 1 to n, and was not an edge that previously existed in the graph.\n\nThe graph is represented as an array edges of length n where edges\\[i] = \\[ai, bi] represents an edge between nodes ai and bi in the graph.\n\nReturn an edge that can be removed so that the graph is still a connected non-cyclical graph. If there are multiple answers, return the edge that appears last in the input edges.\n\n## Approach\n\nThe idea is that we use a disjoint set data structure. As soon as we try to connect two nodes in the same set\ntogether, there must already exist a path between them, which means that that is the last edge of a cycle.\n\n## Solution\n\n::include{file=\"solution.cpp\"}\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n)\n\n## Results\n\n2ms (92.62%), 152.9MB (6.82%)\n\n## Next Steps\n\nNext time, do this without looking up union-find.\n\n## Notes\n\nN/A\n"
     },
     {
+      "slug": "add-binary",
+      "date": "2026-02-22",
+      "problem": "add-binary",
+      "source": "neetcode",
+      "difficulty": "easy",
+      "time_minutes": 4,
+      "topics": [
+        "binary",
+        "addition"
+      ],
+      "language": "python",
+      "markdown": "Add two binary strings together.\n\n## Approach\n\nFairly straightforward additional algorithm -- mod addition and carry. Easy one to get back into the\nflow.\n\n## Solution\n\n```python\nclass Solution:\n    def addBinary(self, a: str, b: str) -> str:\n        a = '0' * (max(len(a), len(b)) - len(a)) + a\n        b = '0' * (max(len(a), len(b)) - len(b)) + b\n\n        result = []\n        carry = 0\n        for d1, d2 in zip(a[::-1], b[::-1]):\n            total = int(d1) + int(d2) + carry\n            if total >= 2:\n                total -= 2\n                carry = 1\n            else:\n                carry = 0\n            result.append(total)\n        if carry:\n            result.append(carry)\n        \n        return ''.join(str(d) for d in result[::-1])\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n)\n\n## Results\n\n28ms, 7.9MB\n\n## Next Steps\n\nI could spend more time making my code neater.\n\n## Notes\n\nN/A\n"
+    },
+    {
+      "slug": "is-palindrome",
+      "date": "2026-02-22",
+      "problem": "is-palindrome",
+      "source": "neetcode",
+      "difficulty": "easy",
+      "time_minutes": 3,
+      "topics": [
+        "palindrome",
+        "array",
+        "implementation"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nThis is fully automatic. You start from the edges and work your way in, ensuring that the furthest\nmatch each other and get closer. To deal with the case-insensitive, non-alphanumeric-ignoring, you\njust have to filter and lowercase the string.\n\n## Solution\n\n```python\nclass Solution:\n    def isPalindrome(self, s: str) -> bool:\n        s = ''.join(c for c in s.lower() if 'a' <= c <= 'z' or '0' <= c <= '9')\n        i = 0\n        j = len(s) - 1\n        while i < j:\n            if s[i] != s[j]:\n                return False\n            i += 1\n            j -= 1\n        return True\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n)\n\n## Results\n\n27ms, 7.7MB\n\n## Next Steps\n\nCould have read the question first. I made a mistake on not filtering alphanumeric characters.\n\n## Notes\n\nN/A\n"
+    },
+    {
+      "slug": "lowest-common-ancestor-in-binary-search-tree",
+      "date": "2026-02-22",
+      "problem": "lowest-common-ancestor-in-binary-search-tree",
+      "source": "leetcode",
+      "difficulty": "medium",
+      "time_minutes": 13,
+      "topics": [
+        "binary-tree",
+        "binary-search-tree"
+      ],
+      "language": "python",
+      "markdown": "Given a binary search tree (BST) where all node values are unique, and two nodes from the tree p and q, return the lowest common ancestor (LCA) of the two nodes.\n\nThe lowest common ancestor between two nodes p and q is the lowest node in a tree T such that both p and q as descendants. The ancestor is allowed to be a descendant of itself.\n\n## Approach\n\nI actually solved a different problem -- lowest common ancestor in binary tree (not search). But\nthat also gave me sufficient performance, which makes me wonder how good the TLE test cases are\non neetcode. I think I'm going to switch.\n\nRegardless, the solution to that problem works for this one, so let me explain it.\n\nWe are simply looking for the first node which contains in its subtree, all of the elements of the\nour set (of 2 nodes). Therefore, all that is needed is to save the first node for which the count\nof valid descendants equals 2. After that, we have to be careful not to overwrite the result value\nvia an ancestor, but that is straightforward.\n\n## Solution\n\n```python\n# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\n\nclass Solution:\n    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:\n        result = None\n\n        def lca_rec(cur: TreeNode, p: TreeNode, q: TreeNode):\n            nonlocal result\n            if cur is None or result is not None:\n                return 0\n            \n            is_target = cur.val == p.val or cur.val == q.val\n            \n            num_seen = sum([is_target, lca_rec(cur.left, p, q), lca_rec(cur.right, p, q)])\n            \n            if result is not None:\n                return 0\n\n            if num_seen == 2:\n                result = cur\n            return num_seen\n        \n        lca_rec(root, p, q)\n        return result\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(log n) (stack)\n\n## Results\n\n28ms, 8.3MB\n\n## Next Steps\n\nRead the problem more carefully. Bad habit of skimming if I've seen something similar.\n\n## Notes\n\nN/A.\n"
+    },
+    {
+      "slug": "subtree-of-a-binary-tree",
+      "date": "2026-02-22",
+      "problem": "subtree-of-a-binary-tree",
+      "source": "neetcode",
+      "difficulty": "easy",
+      "time_minutes": 7,
+      "topics": [
+        "binary-tree"
+      ],
+      "language": "python",
+      "markdown": "Given the roots of two binary trees root and subRoot, return true if there is a subtree of root with the same structure and node values of subRoot and false otherwise.\n\nA subtree of a binary tree tree is a tree that consists of a node in tree and all of this node's descendants. The tree tree could also be considered as a subtree of itself.\n\n## Approach\n\nFully recursive solution works here. treeEqual determines if two trees are equal, recursively. Then,\nwe try all subtrees of root.\n\n## Solution\n\n```python\n# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\n\nclass Solution:   \n    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:\n    \n        def treeEqual(root1, root2): \n            if root1 is None and root2 is None:\n                return True\n            if root1 is None or root2 is None:\n                return False\n            return (root1.val == root2.val and treeEqual(root1.left, root2.left) \n                        and treeEqual(root1.right, root2.right))\n\n        if root is None and subRoot is not None:\n            return False\n\n        return (treeEqual(root, subRoot) or self.isSubtree(root.left, subRoot) \n                                    or self.isSubtree(root.right, subRoot))\n\n```\n\n## Complexity\n\n* Time: O(n\\*m), where n and m are the size of the trees. The worst case is when there are many, many\n  nodes with the same value.\n* Space: O(log n)\n\n## Results\n\n40ms, 8.2MB\n\n## Next Steps\n\nThere's a serialization approach as well. Z-function is a linear string matching algorithm,\nwhich is way more efficient than O(n\\*m) (O(n+m)).\n\n## Notes\n\nN/A\n"
+    },
+    {
+      "slug": "coin-change-ii",
+      "date": "2026-02-20",
+      "problem": "coin-change-ii",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 25,
+      "topics": [
+        "dynamic-programmnig"
+      ],
+      "language": "python",
+      "markdown": "You are given an integer array coins representing coins of different denominations (e.g. 1 dollar, 5 dollars, etc) and an integer amount representing a target amount of money.\n\nReturn the number of distinct combinations that total up to amount. If it's impossible to make up the amount, return 0.\n\nYou may assume that you have an unlimited number of each coin and that each value in coins is unique.\n\n## Approach\n\nThe approach I used was to use DP. My initial attempt was top-down, but that ran into space\nrequirements so I switched to bottom-up. With bottom-up the approach was fairly simple, although\nI did originally make the mistake of counting permutations. The key is to realize that once\nyou stop adding a coin, you can't go back to it, as that would generate a permutation (addition order)\nthat is not sorted in the initial order of the coins. By always maintaining sorted order, we don't\nhave to deduplicate, and simply never generate duplicate permutations in the first place.\n\nThen the DP was straightforward. In fact, it's kind of like a Dyck path -- at each step, take one\nstep to the right (change coin denomination) or take one step up (add one more of the current coin).\nPath counting the Dyck paths is all we need to generate our solution.\n\n## Solution\n\n```python\nclass Solution:\n    def change(self, amount: int, coins: List[int]) -> int:\n        # It seems like DP would be our approach here -- feels pascal-triangles / \n        # path-counting ish.\n        # so, basically the problem is, how many coins does it take to make target\n        # t? well that's just \n\n        # result = sum[change(t - coin) for coin in coins]\n        # with base case 0 if t < 0 (or 1 if t == 0).\n\n        # top down dp would be fastest atp.\n\n        # import functools\n\n        # @functools.cache\n        # def change_rec(t, k):\n        #     if t < 0:\n        #         return 0\n        #     if t == 0:\n        #         return 1\n        #     total = sum(change_rec(t - coins[i], i+1) for i in range(k))\n        #     # print(t, total)\n        #     return total\n\n        # return change_rec(amount, len(coins))\n\n        # getting stack overflow issues, whcih is surprising\n        # whatever, bottom up dp it is\n\n        dp = [[1] + [0] * amount for _ in range(len(coins))]\n\n        for t in range(1, amount+1):\n            for i in range(len(coins)):\n                dp[i][t] = dp[i-1][t]\n                if t-coins[i] >= 0:\n                    dp[i][t] += dp[i][t-coins[i]]\n        # print(dp)\n        return dp[-1][amount]\n\n\n```\n\n## Complexity\n\n* Time: O(n \\* k) -- n is the amount, and is the number of coins\n* Space: O(n \\* k) additional -- as above\n\n## Results\n\n60ms, 8.8MB\n\n## Next Steps\n\nI could try implementing a more optimal solution -- DP problems that depend only on the previous row\nis a good heuristic for getting memory down.\n\n## Notes\n\nSee solution.\n"
+    },
+    {
+      "slug": "foreign-dictionary",
+      "date": "2026-02-19",
+      "problem": "foreign-dictionary",
+      "source": "neetcode",
+      "difficulty": "hard",
+      "time_minutes": 56,
+      "topics": [
+        "lexicographic-ordering",
+        "topological-sort"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nThe approach here is to first determine a partial order based on the items in the dictionary.\nObviously, the orders in which the first letter of each word appears corresponds to the order of\nthe dictionary. Similarly, at each level, we group the words by common prefix up to i, and then\ncompare the i'th letter. This way, we generate every implied order in the dictionary.\n\nWe take each ordering implied by the dictionary (call it a chain), and generate a dependency graph\nfrom it. This can then be used in a standard topological sort, which will tell us a candidate\nordering.\n\nLastly, we verify the ordering, because the solution that I came up with will generate an invalid\norder if the test case is invalid. A quick and dirty way to do this is to verify the candidate\nordering again. If the validation fails, there must not be any valid ordering, because the algorithm\nis guaranteed to generate a valid one if it exists.\n\n## Solution\n\n```python\nclass Solution:\n    def foreignDictionary(self, words: List[str]) -> str:\n        # Can determine partial order by bucketing words\n        # Can determine candidate total order through topological sort I think\n\n        # Topological sorts work only on DAGs\n\n        # It makes sense that we should have a DAG after order determining.\n\n        nested = lambda: defaultdict(nested)\n\n        d = nested()\n\n        for word in words:\n            cur = d\n            for c in word:\n                if c in cur:\n                    if c != cur['last']:\n                        return ''\n                cur['last'] = c\n                cur = cur[c]\n\n        dicts = [d]\n\n        chains = []\n        while len(dicts) > 0:\n            new_dicts = []\n            for cur in dicts:\n                chain = [k for k in cur if k != 'last']\n                new_dicts.extend(cur[k] for k in chain)\n                chains.append(chain)\n            dicts = new_dicts\n\n        # print(chains)\n\n        g = defaultdict(list)\n\n        for chain in chains:\n            for node in chain:\n                g[node]\n            for s, e in zip(chain, chain[1:]):\n                g[e].append(s)\n\n        # print(g)\n        \n        # g (our graph. Time to topo-sort)\n        result = []\n\n        visited = set()\n        def dfs(node, iteration=0):\n            if node in visited:\n                return\n            visited.add(node)\n            for adj in g[node]:\n                dfs(adj, iteration)\n            result.append(node)\n\n        for node in list(g.keys()):\n            dfs(node)\n\n        # copy pasted from verify alien dict\n        order = {c: i for i, c in enumerate(result)}\n        \n        for w1, w2 in zip(words, words[1:]):\n            for c1, c2 in zip(w1, w2):\n                if order[c1] > order[c2]:\n                    return ''\n                elif order[c1] < order[c2]:\n                    break\n            else:\n                if len(w1) > len(w2):\n                    return ''\n\n        return ''.join(result)\n\n```\n\n## Complexity\n\n* Time: O(n\\*m), where n, m are the number and length of words, respectively\n* Space: O(n)\n\n## Results\n\n\\[Add performance metrics here, or N/A if not applicable]\n\n## Next Steps\n\nSolution is quite slow, could be significantly faster\n\n## Notes\n\nSee solution\n"
+    },
+    {
+      "slug": "plus-one",
+      "date": "2026-02-19",
+      "problem": "plus-one",
+      "source": "neetcode",
+      "difficulty": "easy",
+      "time_minutes": 5,
+      "topics": [
+        "array",
+        "math",
+        "addition"
+      ],
+      "language": "python",
+      "markdown": "You are given an integer array digits, where each digits\\[i] is the ith digit of a large integer. It is ordered from most significant to least significant digit, and it will not contain any leading zero.\n\nReturn the digits of the given integer after incrementing it by one.\n\n## Approach\n\nWe simulate the addition operation (ripple carry).\n\n## Solution\n\n```python\nclass Solution:\n    def plusOne(self, digits: List[int]) -> List[int]:\n        carry = 1\n        i = len(digits) - 1\n        while i >= 0:\n            digits[i] += carry\n            carry = 0\n            if digits[i] == 10:\n                digits[i] = 0\n                carry = 1\n            i -= 1\n            if carry == 0:\n                break\n        else:\n            digits = [1] + digits\n\n        return digits\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(1) additional\n\n## Results\n\n28ms, 7.9MB\n\n## Next Steps\n\nThe code could be significantly cleaner.\n\n## Notes\n\nN/A\n"
+    },
+    {
+      "slug": "jump-game-ii",
+      "date": "2026-02-16",
+      "problem": "jump-game-ii",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 10,
+      "topics": [
+        "array"
+      ],
+      "language": "python",
+      "markdown": "You are given an array of integers nums, where nums\\[i] represents the maximum length of a jump towards the right from index i. For example, if you are at nums\\[i], you can jump to any index i + j where:\n\n* j <= nums\\[i]\n* i + j < nums.length\n* You are initially positioned at nums\\[0].\n\nReturn the minimum number of jumps to reach the last position in the array (index nums.length - 1). You may assume there is always a valid answer.\n\n## Approach\n\nI pretty much went with a DP approach. It is O(n \\* m), where n is the\nnumber of cells, and m is the max jump distance.\n\n## Solution\n\n```python\nclass Solution:\n    def jump(self, nums: List[int]) -> int:\n        dp = [0] + [float('inf')] * (len(nums) - 1)\n        for i in range(len(nums)):\n            for j in range(min(nums[i]+1, len(nums)-i)):\n                dp[i+j] = min(dp[i] + 1, dp[i+j])\n        # print(dp)\n        return dp[-1]\n\n```\n\n## Complexity\n\n* Time: O(n\\*m)\n* Space: O(n)\n\n## Results\n\n29ms, 7.8MB\n\n## Next Steps\n\nCould be improved by using a min-max window, according to the solution.\nI guess this would work, because if index k is reachable, k-1 is\nreachable as well, because whichever step reaches k from an index\nbefore k, that starting position can also reach k - 1. This is\nsuffficient to realize an optimal solution.\n\nAll you would have to do, is whenever you extend a window, check the\nfurthest reachable cells by iterating through the cells which have been\nadded.\n\nEasy money.\n\n## Notes\n"
+    },
+    {
+      "slug": "partition-to-k-equal-sum-subsets",
+      "date": "2026-02-11",
+      "problem": "partition-to-k-equal-sum-subsets",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 0,
+      "topics": [
+        "backtracking"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nBacktracking approach. No real method, besides the fact that I remove elements from the array\nwhen the partition is found.\n\n## Solution\n\n```python\nclass Solution:\n    def canPartitionKSubsets(self, nums: List[int], k: int) -> bool:\n        # first, sum(nums) and k together determine the target for each subset.\n        # second, it's a matter of hitting the target sum(nums) / k.\n\n        # Honestly, if we could do this is linear time I'd be very impressed.\n        # nlogn is pretty much the next best thing, which is equivalent to sorting \n        # in any case. And once we've sorted,\n\n        # wait a second, even if we did sort, two pointers approach wouldn't work here.\n        \n        # It's kind of like two-sum, honestly. \n\n        # And why is the frequency of each element no more than 4? \n        # And why is nums.length only 16? Maybe we need to backtrack?\n\n        # Let's try backtracking first, at least.\n\n        if sum(nums) % k != 0:\n            return False\n        target = sum(nums) / k\n        \n        def recPartition(nums, i, k):\n            if k == 0:\n                # print(\"Found partition\")\n                return []\n            if i == len(nums) or k < 0:\n                return None\n\n            res = recPartition(nums, i+1, k-nums[i])\n            if res is not None:\n                res.append(i)\n                return res\n            res = recPartition(nums, i+1, k)\n            if res is not None:\n                return res\n            return None\n\n        for _ in range(k-1):\n            partition = recPartition(nums, 0, target)\n            if partition is None:\n                return False\n            nums = [num for i, num in enumerate(nums) if i not in partition]\n\n        return True\n\n```\n\n## Complexity\n\n* Time: O(2^n)\n* Space: O(n)\n\n## Results\n\n27ms, 7.9MB\n\n## Next Steps\n\nLess memory hungry, check test cases better -- one large test case (bounds) is useful.\n\n## Notes\n\nSee solution.\n"
+    },
+    {
+      "slug": "meeting-schedule",
+      "date": "2026-02-10",
+      "problem": "meeting-schedule",
+      "source": "neetcode",
+      "difficulty": "easy",
+      "time_minutes": 10,
+      "topics": [
+        "intervals"
+      ],
+      "language": "python",
+      "markdown": "## Approach\n\nSort intervals and check if end of previous meeting ever exceeds start of next.\n\n## Solution\n\n```python\n\"\"\"\nDefinition of Interval:\nclass Interval(object):\n    def __init__(self, start, end):\n        self.start = start\n        self.end = end\n\"\"\"\n\nclass Solution:\n    def canAttendMeetings(self, intervals: List[Interval]) -> bool:\n        # Okay, we have a bunch of intervals.\n        # How can we determine if any two intervals overlap?\n        # What if we had a single array, of start and end times,\n        # annotated with START or END? Then if there's ever two consecutive starts,\n        # that means it's over.\n\n        # Okay, I checked the recommended complexity -- nlogn n, which is exactly what I\n        # expected for my solution. Time to implement.\n\n        # for inter in intervals:\n        #     start, end = inter.start, inter.end\n            \n        # Wait, we can literally just sort? Using a priority queue doesn't change the\n        # complexity at all.\n\n        intervals = [(inter.start, inter.end) for inter in intervals]\n\n        intervals.sort()\n        for (_, end), (start, _) in zip(intervals, intervals[1:]):\n            if end > start:\n                return False\n        return True\n\n        # Okay, now I can probably do some test cases.\n        # First of all, let's check the examples.\n        # Test case: touching\n        # Test case: test case, same start, different end\n\n        # Okay, it all passed. Time to submit.\n\n\n```\n\n## Complexity\n\n* Time: O(nlogn)\n* Space: O(n)\n\n## Results\n\n28ms (100%), 7.9MB (97.50%) -- judge is a bit weird though\n\n## Next Steps\n\nOne-shotted this one. I could start using the stopwatch / timer and calculate times more precisely.\n\n## Notes\n\nSee solution\n"
+    },
+    {
+      "slug": "longest-repeating-substring-with-replacement",
+      "date": "2026-02-09",
+      "problem": "longest-repeating-substring-with-replacement",
+      "source": "neetcode",
+      "difficulty": "medium",
+      "time_minutes": 30,
+      "topics": [
+        "sliding-window",
+        "hash-map"
+      ],
+      "language": "python",
+      "markdown": "You are given a string s consisting of only uppercase english characters and an integer k. You can choose up to k characters of the string and replace them with any other uppercase English character.\n\nAfter performing at most k replacements, return the length of the longest substring which contains only one distinct character.\n\n## Approach\n\nSliding window. The core realization is that a window is valid if difference between the frequency\nof the most frequent character and the size of the window is less than or equal to k. Therefore,\nall we need to do is grow the window until the first point that the window is invalid. After that,\nwe shrink the window by increasing the left pointer (i). This will iterate through the largest\npossible window covering each index. At every iteration, we also must check if the current window\nsize is greater than the greatest size seen so far.\n\nI missed one optimization which actually changes the complexity -- I will discuss that in next steps.\n\n## Solution\n\n```python\nclass Solution:\n    def characterReplacement(self, s: str, k: int) -> int:\n        i = 0\n        j = 0\n        cnt = collections.defaultdict(int)\n\n        maxi = 0\n        while j < len(s):\n            j += 1\n            l = j - i\n            cnt[s[j-1]] += 1\n            ch = max(cnt, key=cnt.get)\n            if l - cnt[ch] > k:\n                i += 1\n                cnt[s[i-1]] -= 1\n                l -= 1\n            maxi = max(maxi, l)\n        return maxi\n\n```\n\n## Complexity\n\n* Time: O(nk)\n* Space: O(k)\n\n## Results\n\n28ms (100%), 7.8MB (100%)\n\n## Next Steps\n\nNotice the extra k factor in the time complexity. This can be reduced by realizing that the maximum\nseen window size is simply k + the frequency of the most frequent element. Therefore, we can\nmonotonically check if the current frequency of the added character is larger than the largest.\nEven if the frequency drops below the highest seen frequency, the fact that the previous window is\nlarger than the current window guarantees that the maximum will not be affected. Only when we see\na new, higher max frequency do we need to update our result, which is precisely when the maximum\nfrequency increases.\n\n## Notes\n\nN/A\n"
+    },
+    {
+      "slug": "evaluate-reverse-polish-notation",
+      "date": "2026-02-08",
+      "problem": "evaluate-reverse-polish-notation",
+      "source": "leetcode",
+      "difficulty": "medium",
+      "time_minutes": 25,
+      "topics": [
+        "stack",
+        "arithmetic"
+      ],
+      "language": "python",
+      "markdown": "You are given an array of strings tokens that represents a valid arithmetic expression in Reverse Polish Notation.\n\nReturn the integer that represents the evaluation of the expression.\n\n* The operands may be integers or the results of other operations.\n* The operators include '+', '-', '\\*', and '/'.\n* Assume that division between integers always truncates toward zero.\n\n## Approach\n\nReverse Polish Notation is easily evaluable using a stack approach. The rightmost argument is on the\ntop of the stack, and the argument to its left is the second highest item on the stack. When we\nencounter an op, RPN assumes that the op applies to the rightmost two arguments. Therefore, all\nwe need to do is pop the top two elements as arguments, and apply the op, and push the result back\non to the stack.\n\nThe only intricacies are 1) op order, as some operands are not commutative, and 2) a quirk of Python\nthat the integer division operator rounds towards negative infinity instead of truncating toward 0.\nAs long as you keep in mind that the first pop is the right element, and that int(a / b) is the\nidiomatic way to do a truncating division, you should be fine.\n\n## Solution\n\n```python\nclass Solution:\n    def evalRPN(self, tokens: List[str]) -> int:\n        stack = []\n        for token in tokens:\n            match token:\n                case '+':\n                    b, a = stack.pop(), stack.pop()\n                    stack.append(a + b)\n                case '-':\n                    b, a = stack.pop(), stack.pop()\n                    stack.append(a - b)\n                case '*':\n                    b, a = stack.pop(), stack.pop()\n                    stack.append(a * b)\n                case '/':\n                    b, a = stack.pop(), stack.pop()\n                    stack.append(int(a / b))\n                case _:\n                    stack.append(int(token))\n        return stack[-1]\n\n```\n\n## Complexity\n\n* Time: O(n)\n* Space: O(n)\n\n## Results\n\n30ms (100%), 7.9MB (100%)\n\n## Next Steps\n\nRemember the truncation thing. That threw me off majorly.\n\n## Notes\n\nN/A\n"
+    },
+    {
       "slug": "excel-sheet-column-title",
       "date": "2026-02-06",
       "problem": "excel-sheet-column-title",
@@ -728,23 +893,23 @@
     },
     {
       "date": "2026-02-08",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 1
     },
     {
       "date": "2026-02-09",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 1
     },
     {
       "date": "2026-02-10",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 1
     },
     {
       "date": "2026-02-11",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 1
     },
     {
       "date": "2026-02-12",
@@ -768,8 +933,8 @@
     },
     {
       "date": "2026-02-16",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 1
     },
     {
       "date": "2026-02-17",
@@ -783,13 +948,13 @@
     },
     {
       "date": "2026-02-19",
-      "count": 0,
-      "level": 0
+      "count": 2,
+      "level": 2
     },
     {
       "date": "2026-02-20",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 1
     },
     {
       "date": "2026-02-21",
@@ -798,8 +963,8 @@
     },
     {
       "date": "2026-02-22",
-      "count": 0,
-      "level": 0
+      "count": 4,
+      "level": 4
     },
     {
       "date": "2026-02-23",
@@ -1083,52 +1248,52 @@
       37,
       38,
       38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
-      38,
       39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39,
-      39
+      40,
+      41,
+      42,
+      42,
+      42,
+      42,
+      42,
+      43,
+      43,
+      43,
+      45,
+      46,
+      46,
+      50,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51,
+      51
     ],
     "trend": [
       1,
